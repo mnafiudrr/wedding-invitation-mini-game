@@ -1,0 +1,25 @@
+/* src/app.css */
+:root {
+  --bg-sky: #b3dcfd;
+  --ground-color: #8fb935;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden; /* Prevent native scrolling, handle via JS */
+  background-color: var(--bg-sky);
+  font-family: 'Courier New', Courier, monospace; /* Placeholder pixel font */
+  touch-action: none; /* Prevent native swipe actions */
+}
+
+/* Pixel art rendering for images */
+img {
+  image-rendering: pixelated;
+}

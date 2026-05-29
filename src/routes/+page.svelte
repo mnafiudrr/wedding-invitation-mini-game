@@ -1,0 +1,218 @@
+<script lang="ts">
+  import { onMount } from 'svelte';
+  import { gameState, selectedCharacter, cameraX, charX, activeModal } from '$lib/stores/game';
+  import World from '$lib/components/game/World.svelte';
+  import Character from '$lib/components/game/Character.svelte';
+  import House from '$lib/components/game/House.svelte';
+  import Modal from '$lib/components/ui/Modal.svelte';
+  import { houses } from '$lib/data/houses';
+
+  let innerWidth = $state(0);
+  let moveDirection = $state<0 | -1 | 1>(0);
+  let animationFrameId: number;
+
+  function selectCharacter(char: 'bride' | 'groom') {
+    $selectedCharacter = char;
+    $gameState = 'playing';
+    
+    // Spawn slightly before the first house (which is at x=300)
+    charX.set(100, { hard: true });
+    cameraX.set(0, { hard: true });
+  }
+
+  function updatePosition() {
+    if (moveDirection !== 0 && $gameState === 'playing' && !$activeModal) {
+      const speed = 10; // Increased speed slightly for better feel
+      let newCharX = $charX + (moveDirection * speed);
+      newCharX = Math.max(0, Math.min(newCharX, 2500 - 48));
+      charX.set(newCharX, { hard: true });
+
+      let newCameraX = newCharX - (innerWidth / 2) + 24;
+      newCameraX = Math.max(0, Math.min(newCameraX, 2500 - innerWidth));
+      cameraX.set(newCameraX, { hard: true });
+
+      animationFrameId = requestAnimationFrame(updatePosition);
+    }
+  }
+
+  function startMove(dir: -1 | 1) {
+    if ($gameState !== 'playing' || $activeModal) return;
+    moveDirection = dir;
+    if (animationFrameId) cancelAnimationFrame(animationFrameId);
+    animationFrameId = requestAnimationFrame(updatePosition);
+  }
+
+  function stopMove() {
+    moveDirection = 0;
+    if (animationFrameId) cancelAnimationFrame(animationFrameId);
+  }
+</script>
+
+<svelte:window bind:innerWidth />
+
+{#if $gameState === 'title'}
+  <div class="title-screen">
+    <h1>Wedding Invitation</h1>
+    <div class="subtitle">John Doe & Jean Dea</div>
+    
+    <div class="character-selection">
+      <button onclick={() => selectCharacter('bride')}>
+        <div class="avatar bride">B</div>
+        <span>Open as Bride</span>
+      </button>
+      <button onclick={() => selectCharacter('groom')}>
+        <div class="avatar groom">G</div>
+        <span>Open as Groom</span>
+      </button>
+    </div>
+  </div>
+{:else if $gameState === 'playing'}
+  <div class="game-container">
+    <World>
+      {#each houses as house}
+        <House id={house.id} title={house.title} x={house.x} color={house.color} />
+      {/each}
+      <Character />
+    </World>
+
+    {#if !$activeModal}
+      <div class="controls">
+        <button 
+          class="control-btn" 
+          ontouchstart={(e) => { e.preventDefault(); startMove(-1); }}
+          onmousedown={() => startMove(-1)}
+          ontouchend={stopMove}
+          onmouseup={stopMove}
+          onmouseleave={stopMove}
+          ontouchcancel={stopMove}
+          oncontextmenu={(e) => e.preventDefault()}
+        >
+          ←
+        </button>
+        <button 
+          class="control-btn" 
+          ontouchstart={(e) => { e.preventDefault(); startMove(1); }}
+          onmousedown={() => startMove(1)}
+          ontouchend={stopMove}
+          onmouseup={stopMove}
+          onmouseleave={stopMove}
+          ontouchcancel={stopMove}
+          oncontextmenu={(e) => e.preventDefault()}
+        >
+          →
+        </button>
+      </div>
+    {/if}
+  </div>
+
+  {#if $activeModal}
+    <Modal title={houses.find(h => h.id === $activeModal)?.title || ''}>
+      <div class="placeholder-content">
+        <p>This is the content area for {houses.find(h => h.id === $activeModal)?.title}.</p>
+        <p>Actual content forms and details will be implemented in Milestone 3.</p>
+      </div>
+    </Modal>
+  {/if}
+{/if}
+
+<style>
+  .title-screen {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--bg-sky);
+    color: #333;
+    text-align: center;
+  }
+  h1 { font-size: 2rem; margin-bottom: 0.5rem; }
+  .subtitle { font-size: 1.2rem; margin-bottom: 3rem; }
+  
+  .character-selection {
+    display: flex;
+    gap: 2rem;
+  }
+  
+  button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    font-family: inherit;
+    font-size: 1rem;
+    transition: transform 0.2s;
+  }
+  
+  button:hover {
+    transform: scale(1.1);
+  }
+  
+  .avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: bold;
+    border: 3px solid #333;
+    background: #fff;
+  }
+  
+  .bride { background-color: #ffb8b8; }
+  .groom { background-color: #b8c0ff; }
+  
+  .game-container {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .placeholder-content {
+    padding: 2rem;
+    text-align: center;
+    color: #555;
+    line-height: 1.5;
+  }
+
+  .controls {
+    position: absolute;
+    bottom: 2rem;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 2rem;
+    pointer-events: none;
+    z-index: 50;
+  }
+
+  .control-btn {
+    pointer-events: auto;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.9);
+    border: 3px solid #333;
+    font-size: 24px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: none;
+    box-shadow: 0 4px 0 #333;
+  }
+  
+  .control-btn:active {
+    box-shadow: 0 0px 0 #333;
+    transform: translateY(4px);
+  }
+</style>
