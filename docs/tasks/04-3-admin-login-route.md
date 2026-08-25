@@ -1,6 +1,9 @@
 # Task 4.3 — Admin Login Route
 
-- **Status**: [ ] TODO
+- **Status**: [x] DONE (2026-08-25)
+
+> Verified live: wrong creds → inline failure JSON; correct creds → 302 `/admin` + session row created.
+> Rate limiter: in-memory, 5 attempts / 5 min per username. Logout action deferred to 04-4.
 - **Milestone**: 4 — Admin Dashboard
 - **Depends on**: 04-2
 - **Blocks**: 04-4
