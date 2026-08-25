@@ -1,6 +1,11 @@
 # Task 4.4 — Admin Layout & Auth Guard
 
-- **Status**: [ ] TODO
+- **Status**: [x] DONE (2026-08-25)
+
+> Verified live: anonymous `/admin` → 302 login; logged-in shows nav + username; logout invalidates
+> session server-side (row deleted) and clears cookie. Guard approach: layout `load` guard + per-page
+> re-check in each admin page's own load/action (belt-and-braces). Login page returns early from the
+> layout guard and renders no nav.
 - **Milestone**: 4 — Admin Dashboard
 - **Depends on**: 04-2, 04-3
 - **Blocks**: 04-5, 04-6
