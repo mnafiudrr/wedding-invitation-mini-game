@@ -7,6 +7,24 @@
   import Modal from '$lib/components/ui/Modal.svelte';
   import { houses } from '$lib/data/houses';
 
+  import BrideGroom from '$lib/components/ui/menus/BrideGroom.svelte';
+  import QuranQuotes from '$lib/components/ui/menus/QuranQuotes.svelte';
+  import Events from '$lib/components/ui/menus/Events.svelte';
+  import Maps from '$lib/components/ui/menus/Maps.svelte';
+  import RSVP from '$lib/components/ui/menus/RSVP.svelte';
+  import Messages from '$lib/components/ui/menus/Messages.svelte';
+  import Credits from '$lib/components/ui/menus/Credits.svelte';
+
+  const modalComponents: Record<string, any> = {
+    'bride-groom': BrideGroom,
+    'quran-quotes': QuranQuotes,
+    'events': Events,
+    'maps': Maps,
+    'rsvp': RSVP,
+    'messages': Messages,
+    'credits': Credits
+  };
+
   let innerWidth = $state(0);
   let moveDirection = $state<0 | -1 | 1>(0);
   let animationFrameId: number;
@@ -107,10 +125,14 @@
 
   {#if $activeModal}
     <Modal title={houses.find(h => h.id === $activeModal)?.title || ''}>
-      <div class="placeholder-content">
-        <p>This is the content area for {houses.find(h => h.id === $activeModal)?.title}.</p>
-        <p>Actual content forms and details will be implemented in Milestone 3.</p>
-      </div>
+      {#if modalComponents[$activeModal]}
+        {@const Component = modalComponents[$activeModal]}
+        <Component />
+      {:else}
+        <div class="placeholder-content">
+          <p>This is the content area for {houses.find(h => h.id === $activeModal)?.title}.</p>
+        </div>
+      {/if}
     </Modal>
   {/if}
 {/if}
