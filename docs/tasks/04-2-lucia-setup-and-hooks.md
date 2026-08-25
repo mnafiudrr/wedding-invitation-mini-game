@@ -1,6 +1,10 @@
 # Task 4.2 — Auth Instance, Types & Hooks
 
-- **Status**: [ ] TODO
+- **Status**: [x] DONE (2026-08-25)
+
+> Note: implemented per the Option B decision from 04-1 — `src/lib/server/auth/index.ts` owns
+> session create/validate/invalidate + cookie options (30-day sliding refresh); no lucia package.
+> Cookie name: `wedding_session`; stale cookies deleted in hooks.
 - **Milestone**: 4 — Admin Dashboard
 - **Depends on**: 04-1
 - **Blocks**: 04-3, 04-4
