@@ -1,6 +1,6 @@
 # Task 4.1 — Auth Dependencies & Schema Extension
 
-- **Status**: [ ] TODO
+- **Status**: [x] DONE (2026-08-25)
 - **Milestone**: 4 — Admin Dashboard
 - **Depends on**: nothing (first task of M4)
 - **Blocks**: 04-2, 04-3, 04-4, 04-5, 04-6
@@ -13,7 +13,11 @@ The upstream `lucia` library was deprecated by its author (it now exists as a se
 - **Option A (plan-compliant)**: Install `lucia` + `oslo` anyway (pinned versions, works fine, no new features).
 - **Option B (recommended long-term)**: Follow the Lucia "session token" pattern manually using `oslo` only (`@oslojs/crypto`, `@oslojs/encoding`) — fewer deps, same DB shape.
 
-Record the decision in this file before proceeding. The rest of this task assumes Option A unless noted; if Option B, skip the `lucia` install but keep the identical schema.
+> **DECISION (2026-08-25): Option B variant — manual session pattern with ZERO new dependencies.**
+> Implemented with node's built-in `crypto` (`scrypt` for password hashing, `randomBytes`/`timingSafeEqual` for tokens).
+> Rationale: Lucia itself is archived; its session pattern is small enough to own outright, and avoiding archived deps
+> keeps the dependency tree clean per project constraints. DB shape stays identical to what the plan describes.
+> Password format: `scrypt$N$r$p$salt$hash` (self-describing, upgradeable).
 
 ## Steps
 

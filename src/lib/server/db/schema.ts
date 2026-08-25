@@ -16,3 +16,18 @@ export const messages = mysqlTable('messages', {
   isApproved: boolean('is_approved').default(false).notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull()
 });
+
+export const users = mysqlTable('users', {
+  id: varchar('id', { length: 36 }).primaryKey(), // crypto.randomUUID()
+  username: varchar('username', { length: 31 }).notNull().unique(),
+  passwordHash: varchar('password_hash', { length: 255 }).notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull()
+});
+
+export const sessions = mysqlTable('sessions', {
+  id: varchar('id', { length: 64 }).primaryKey(), // sha256 hash of the session token
+  userId: varchar('user_id', { length: 36 })
+    .notNull()
+    .references(() => users.id, { onDelete: 'cascade' }),
+  expiresAt: timestamp('expires_at').notNull()
+});
