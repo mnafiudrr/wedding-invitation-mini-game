@@ -1,6 +1,9 @@
 # Task 4.5 — RSVP Dashboard
 
-- **Status**: [ ] TODO
+- **Status**: [x] DONE (2026-08-25)
+
+> Verified live with 3 seeded guests: summary correct (3/2/1/6), table renders, anonymous → 302.
+> CSV export is client-side (Blob download), no extra endpoint.
 - **Milestone**: 4 — Admin Dashboard
 - **Depends on**: 04-4
 - **Blocks**: nothing
