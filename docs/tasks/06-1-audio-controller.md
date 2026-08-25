@@ -1,0 +1,62 @@
+# Task 6.1 — AudioController Utility
+
+- **Status**: [ ] TODO
+- **Milestone**: 6 — Audio System & Final Polish
+- **Depends on**: 05-2 (walking state exists to hook step sounds)
+- **Blocks**: 06-2
+
+## Objective
+Create a lightweight, singleton audio manager that respects browser autoplay policies and mobile performance.
+
+## Steps
+
+### 1. Create `src/lib/audio/AudioController.ts`
+Singleton class, no external libraries:
+
+```ts
+class AudioController {
+  private ctx: AudioContext | null = null;
+  private master: GainNode | null = null;
+  private buffers = new Map<string, AudioBuffer>();
+  muted = $state(false); // rune OK in .ts.svelte or use writable store
+
+  init() { /* create AudioContext + master GainNode; MUST be called from a user gesture */ }
+  async preload(name: string, url: string) { /* fetch + decodeAudioData, store buffer */ }
+  play(name: string, { loop, volume }) { /* BufferSource -> Gain -> master */ }
+  setMuted(m: boolean) { /* ramp master gain to 0/1 over ~0.1s to avoid clicks */ }
+}
+export const audio = new AudioController();
+```
+
+Key rules:
+- `init()` only ever called inside a user-gesture handler (see 06-2). Guard against double-init.
+- If `AudioContext` is unavailable or decode fails → fail silently; audio must never break the game.
+- Suspend the context when tab hidden (`visibilitychange` → `ctx.suspend()/resume()`) to save battery.
+
+### 2. Asset plan (`static/audio/`)
+| Sound | File | Trigger |
+|---|---|---|
+| BGM | `bgm.mp3` (loop, ≤ 1MB target) | after character select |
+| Step | `step.wav` (tiny, <20KB) | while walking (throttled, e.g., every 250ms) |
+| Modal open | `open.wav` | house tap |
+| Select/UI | `select.wav` | buttons |
+
+Prefer short one-shot WAVs for SFX (no decode latency), compressed MP3/OGG for BGM.
+
+### 3. Preloading strategy
+- Preload BGM + UI sounds immediately after first user interaction (character select tap).
+- Do NOT block game start on audio loading.
+
+## Constraints
+- No Howler.js / Tone.js / any audio library — Web Audio API directly (per project constraint banning heavy libs).
+- Total initial audio payload budget ≤ 1.5MB.
+- All playback routed through one master GainNode so mute is a single control point.
+
+## Acceptance criteria
+- [ ] No console warnings about autoplay policy on iOS Safari and Android Chrome
+- [ ] Sounds play reliably after first tap; zero sound before any gesture
+- [ ] Mute silences everything instantly including looping BGM
+- [ ] `npm run check` passes
+
+## Files touched
+- `src/lib/audio/AudioController.ts` (new), `static/audio/*` (new)
