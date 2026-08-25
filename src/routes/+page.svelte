@@ -1,6 +1,8 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { gameState, selectedCharacter, cameraX, charX, activeModal, isMoving, facing } from '$lib/stores/game';
+  import { audio } from '$lib/audio/AudioController';
+  import MuteButton from '$lib/components/ui/MuteButton.svelte';
   import World from '$lib/components/game/World.svelte';
   import Character from '$lib/components/game/Character.svelte';
   import House from '$lib/components/game/House.svelte';
@@ -28,11 +30,18 @@
   let innerWidth = $state(0);
   let moveDirection = $state<0 | -1 | 1>(0);
   let animationFrameId: number;
+  let lastStepTime = 0;
 
   function selectCharacter(char: 'bride' | 'groom') {
+    audio.init(); // inside this click gesture (autoplay policy)
+    audio.preload('bgm', '/audio/bgm.wav');
+    audio.preload('step', '/audio/step.wav');
+    audio.preload('open', '/audio/open.wav');
+    audio.play('bgm', { loop: true, volume: 0.4 });
+    audio.play('select');
     $selectedCharacter = char;
     $gameState = 'playing';
-    
+
     // Spawn slightly before the first house (which is at x=300)
     charX.set(100, { hard: true });
     cameraX.set(0, { hard: true });
@@ -48,6 +57,12 @@
       let newCameraX = newCharX - (innerWidth / 2) + 24;
       newCameraX = Math.max(0, Math.min(newCameraX, 2500 - innerWidth));
       cameraX.set(newCameraX, { hard: true });
+
+      const now = performance.now();
+      if (now - lastStepTime > 280) {
+        lastStepTime = now;
+        audio.play('step', { volume: 0.5 });
+      }
 
       animationFrameId = requestAnimationFrame(updatePosition);
     }
@@ -72,6 +87,7 @@
 <svelte:window bind:innerWidth />
 
 {#if $gameState === 'title'}
+  <MuteButton />
   <div class="title-screen">
     <h1>Wedding Invitation</h1>
     <div class="subtitle">John Doe & Jean Dea</div>
@@ -88,6 +104,7 @@
     </div>
   </div>
 {:else if $gameState === 'playing'}
+  <MuteButton />
   <div class="game-container">
     <World>
       {#each houses as house}

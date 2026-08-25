@@ -1,5 +1,6 @@
 <script lang="ts">
   import { charX, activeModal } from '$lib/stores/game';
+  import { audio } from '$lib/audio/AudioController';
 
   let { id, title, x, color } = $props();
 
@@ -9,6 +10,7 @@
 
   function openModal() {
     if (isNear) {
+      audio.play('open');
       $activeModal = id;
     }
   }
