@@ -1,6 +1,10 @@
 # Task 4.6 — Message Moderation Dashboard
 
-- **Status**: [ ] TODO
+- **Status**: [x] DONE (2026-08-25)
+
+> Verified live: toggle flips both directions atomically (`sql\`not is_approved\``), public list
+> hides unapproved messages, unauthenticated action → 401. Also added `?/deleteMessage` for spam.
+> NOTE: public submission still auto-approves (dev hack) — flip in task 07 §7.1.
 - **Milestone**: 4 — Admin Dashboard
 - **Depends on**: 04-4
 - **Blocks**: nothing
