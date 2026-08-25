@@ -1,6 +1,11 @@
 # Task 6.2 — Mute Toggle & Audio Integration
 
-- **Status**: [ ] TODO
+- **Status**: [x] DONE (2026-08-25)
+
+> Mute toggle uses emoji glyphs (🔇/🔊) instead of PNGs for now — swap for `icon-sound-on/off.png`
+> from `docs/graphics-needed.md` §4 when art lands. Persisted via `localStorage('wedding_muted')`,
+> master gain ramp 0.1s, context suspended on tab hide. Steps throttled to 280ms inside the
+> existing rAF loop (no new timers).
 - **Milestone**: 6 — Audio System & Final Polish
 - **Depends on**: 06-1
 - **Blocks**: launch readiness
