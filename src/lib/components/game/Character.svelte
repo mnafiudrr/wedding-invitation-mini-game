@@ -1,15 +1,15 @@
 <script lang="ts">
-  import { charX, selectedCharacter } from '$lib/stores/game';
+  import { charX, selectedCharacter, isMoving, facing } from '$lib/stores/game';
 </script>
 
 <div class="character" style="transform: translate3d({$charX}px, 0, 0);">
-  {#if $selectedCharacter === 'bride'}
-    <div class="placeholder bride">B</div>
-  {:else if $selectedCharacter === 'groom'}
-    <div class="placeholder groom">G</div>
-  {:else}
-    <div class="placeholder">?</div>
-  {/if}
+  <div
+    class="sprite {$facing === 'left' ? 'facing-left' : ''}"
+    class:walking={$isMoving}
+    style="background-image: url('/sprites/char-{$selectedCharacter ?? 'groom'}-{$isMoving
+      ? 'walk'
+      : 'front'}.png');"
+  ></div>
 </div>
 
 <style>
@@ -23,18 +23,33 @@
     will-change: transform;
     z-index: 10;
   }
-  .placeholder {
-    width: 100%;
-    height: 100%;
-    background-color: #fff;
-    border: 2px solid #000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    font-size: 24px;
-    border-radius: 24px 24px 0 0;
+  .sprite {
+    width: 48px;
+    height: 48px;
+    background-repeat: no-repeat;
+    image-rendering: pixelated;
+    animation: idle 0.8s steps(2) infinite;
   }
-  .bride { background-color: #ffb8b8; }
-  .groom { background-color: #b8c0ff; }
+  .sprite.walking {
+    animation: walk 0.5s steps(6) infinite;
+  }
+  @keyframes idle {
+    from {
+      background-position-x: 0;
+    }
+    to {
+      background-position-x: -96px; /* 2 frames x 48px */
+    }
+  }
+  @keyframes walk {
+    from {
+      background-position-x: 0;
+    }
+    to {
+      background-position-x: -288px; /* 6 frames x 48px */
+    }
+  }
+  .facing-left {
+    transform: scaleX(-1);
+  }
 </style>

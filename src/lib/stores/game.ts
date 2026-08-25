@@ -22,3 +22,8 @@ export const charX = spring(0, {
 // Currently active modal id, null if none
 export const activeModal = writable<string | null>(null);
 
+// Sprite animation state, set from the movement handlers in +page.svelte
+export const isMoving = writable<boolean>(false);
+export type Facing = 'right' | 'left';
+export const facing = writable<Facing>('right');
+

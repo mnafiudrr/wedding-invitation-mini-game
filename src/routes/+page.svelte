@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { gameState, selectedCharacter, cameraX, charX, activeModal } from '$lib/stores/game';
+  import { gameState, selectedCharacter, cameraX, charX, activeModal, isMoving, facing } from '$lib/stores/game';
   import World from '$lib/components/game/World.svelte';
   import Character from '$lib/components/game/Character.svelte';
   import House from '$lib/components/game/House.svelte';
@@ -55,6 +55,8 @@
 
   function startMove(dir: -1 | 1) {
     if ($gameState !== 'playing' || $activeModal) return;
+    facing.set(dir === -1 ? 'left' : 'right');
+    isMoving.set(true);
     moveDirection = dir;
     if (animationFrameId) cancelAnimationFrame(animationFrameId);
     animationFrameId = requestAnimationFrame(updatePosition);
@@ -62,6 +64,7 @@
 
   function stopMove() {
     moveDirection = 0;
+    isMoving.set(false);
     if (animationFrameId) cancelAnimationFrame(animationFrameId);
   }
 </script>
