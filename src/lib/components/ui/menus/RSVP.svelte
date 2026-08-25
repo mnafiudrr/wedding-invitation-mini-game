@@ -13,8 +13,10 @@
       submitting = false;
       if (result.type === 'success') {
         success = true;
+      } else if (result.type === 'failure' && result.data?.error) {
+        errorMsg = String(result.data.error);
       } else {
-        errorMsg = result.data?.error || 'Something went wrong.';
+        errorMsg = 'Something went wrong.';
       }
       update({ reset: false });
     };
