@@ -9,9 +9,12 @@
 Replace the placeholder character box with a sprite-sheet-driven walk cycle using pure CSS.
 
 ## Prerequisite asset
-- Obtain or generate two sprite sheets: `bride-spritesheet.png` and `groom-spritesheet.png` in `static/sprites/`.
-- Layout: horizontal strip of N frames (e.g., 4 idle + 6 walk = single strip per state, or one strip with fixed frame size).
-- Frame size suggestion: 48×48 px logical (matches current character width constant `2500 - 48` in `+page.svelte:45`). Keep sheets ≤ 1024px wide.
+Full spec in `docs/graphics-needed.md` §1. Summary — **4 files** in `static/sprites/`, separate sheet per state/facing:
+
+| File | Frames | Strip size | Used when |
+|---|---|---|---|
+| `char-bride-front.png` / `char-groom-front.png` | 2 (48×48 each) | 96×48 | NOT moving (idle, modal open) — subtle breathe/blink loop |
+| `char-bride-walk.png` / `char-groom-walk.png` | 6 (48×48 each) | 288×48 | Moving — right-facing; left = CSS flip |
 
 ## Steps
 
@@ -20,15 +23,22 @@ Replace the placeholder character box with a sprite-sheet-driven walk cycle usin
 ```html
 <div class="sprite {facing} {moving ? 'walking' : 'idle'}"></div>
 ```
-- CSS pattern (GPU-friendly, no JS animation):
+- CSS pattern (GPU-friendly, no JS animation) — separate sheet per state so each maps to one keyframe:
 ```css
 .sprite {
   width: 48px; height: 48px;
-  background-image: url('/sprites/groom-spritesheet.png');
-  background-repeat: no-repeat;
+  background-image: url('/sprites/char-groom-front.png'); /* default = front idle */
   image-rendering: pixelated;
 }
+.sprite.idle {
+  animation: idle 0.8s steps(2) infinite; /* front-facing breathe/blink */
+}
+@keyframes idle {
+  from { background-position-x: 0; }
+  to   { background-position-x: -96px; }
+}
 .sprite.walking {
+  background-image: url('/sprites/char-groom-walk.png');
   animation: walk 0.5s steps(6) infinite; /* steps() = frame count of walk strip */
 }
 @keyframes walk {
@@ -54,8 +64,8 @@ Replace the placeholder character box with a sprite-sheet-driven walk cycle usin
 - One HTTP request per sheet; consider combining bride/groom into one sheet later if profiling demands.
 
 ## Acceptance criteria
+- [ ] Front-facing idle sheet shows whenever stopped (and during modals), with no visual jump vs walk frames (shared baseline)
 - [ ] Walk cycle plays only while moving, correct direction flip
-- [ ] Idle frame shown when stopped and while modals open
 - [ ] No jank on low-end mobile profile (Chrome DevTools CPU throttle 4x): transforms/compositing only
 - [ ] `npm run check` passes
 
