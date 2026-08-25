@@ -24,22 +24,25 @@ This is the source of truth for project progress. Before starting a new task, re
 - [x] Implement `+page.server.ts` form actions for RSVP submission (handling `ER_DUP_ENTRY`).
 - [x] Implement `+page.server.ts` message submission and data loading.
 
-## 🟨 Milestone 4: Admin Dashboard (TO DO - UP NEXT)
-- [ ] **Dependencies**: Install Lucia auth packages (`lucia`, `oslo`, `@lucia-auth/adapter-drizzle`).
-- [ ] **Schema Update**: Add `users` and `sessions` tables to `src/lib/server/db/schema.ts` and run `drizzle-kit push`.
-- [ ] **Auth Setup**: Configure Lucia instance in `src/lib/server/auth/index.ts`. Set up hooks in `src/hooks.server.ts` to populate `event.locals.user` and `event.locals.session`.
-- [ ] **Auth Routes**: Create `/admin/login/+page.svelte` and `/admin/login/+page.server.ts` for credential login.
-- [ ] **Admin Layout**: Create `/admin/+layout.server.ts` to redirect unauthenticated users back to login. Create `/admin/+layout.svelte` for admin navigation.
-- [ ] **RSVP Dashboard**: Create `/admin/rsvps/+page.svelte` to view and summarize all guest data.
-- [ ] **Moderation Dashboard**: Create `/admin/messages/+page.svelte` with actions to toggle `isApproved` on messages.
+## 🟩 Milestone 4: Admin Dashboard (COMPLETED)
+> Implementation note: Lucia is archived upstream — session auth implemented manually (node crypto scrypt + hashed session tokens) following the Lucia pattern. See `docs/tasks/04-1` decision record.
+- [x] ~~**Dependencies**~~: No new deps needed (manual session auth, zero-dependency decision in 04-1).
+- [x] **Schema Update**: `users` and `sessions` tables added; applied via `drizzle-kit push`. Seed via `npm run create-admin`.
+- [x] **Auth Setup**: `src/lib/server/auth/index.ts` (session create/validate/invalidate) + `src/hooks.server.ts` populating `locals.user` / `locals.session`.
+- [x] **Auth Routes**: `/admin/login` with rate limiting (5 attempts / 5 min).
+- [x] **Admin Layout**: Guard in `/admin/+layout.server.ts` + nav shell with logout.
+- [x] **RSVP Dashboard**: `/admin/rsvps` with summary cards, filter, client-side CSV export.
+- [x] **Moderation Dashboard**: `/admin/messages` with `?/toggleApproval` + `?/deleteMessage`.
 
-## 🟥 Milestone 5: Asset Integration & Optimization (TO DO)
+## 🟨 Milestone 5: Asset Integration & Optimization (IN PROGRESS)
 - [ ] Add retro font faces to `static/fonts` and apply to `app.css`.
-- [ ] Build CSS sprite animation logic for `Character.svelte`.
+- [x] Build CSS sprite animation logic for `Character.svelte` (front-facing idle 2-frame + walk 6-frame sheets; placeholder art via generator script).
 - [ ] Replace `House.svelte` colored boxes with image assets.
 - [ ] Add `Parallax.svelte` component for clouds/background elements.
 
-## 🟥 Milestone 6: Audio System & Final Polish (TO DO)
-- [ ] Build `AudioController.ts` utility.
-- [ ] Add UI mute toggle button overlay.
-- [ ] Integrate BGM and sound effect triggers (steps, bumps).
+## 🟨 Milestone 6: Audio System & Final Polish (IN PROGRESS)
+- [x] Build `AudioController.ts` utility (zero-dep Web Audio singleton).
+- [x] Add UI mute toggle button overlay (emoji glyphs until icon PNGs arrive).
+- [x] Integrate BGM and sound effect triggers (steps, modal open, select) — placeholder WAVs; replace with compressed assets before launch.
+
+Asset specs: see `docs/graphics-needed.md`.
