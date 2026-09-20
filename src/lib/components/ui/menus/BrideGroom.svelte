@@ -6,7 +6,7 @@
 <div class="menu-content">
   <div class="profile">
     <div class="avatar-frame bride-color">
-      <IdleSprite art="women" size={80} zoom={3} />
+      <IdleSprite art="women" size={80} zoom={2} />
     </div>
     <h3>{COUPLE.bride.name}</h3>
     <p>Putri dari Bapak {COUPLE.bride.parent.split(' & ')[0]} & Ibu {COUPLE.bride.parent.split(' & ')[1]}</p>
@@ -16,7 +16,7 @@
 
   <div class="profile">
     <div class="avatar-frame groom-color">
-      <IdleSprite art="men" size={80} zoom={3} />
+      <IdleSprite art="men" size={80} zoom={2} />
     </div>
     <h3>{COUPLE.groom.name}</h3>
     <p>Putra dari Bapak {COUPLE.groom.parent.split(' & ')[0]} & Ibu {COUPLE.groom.parent.split(' & ')[1]}</p>

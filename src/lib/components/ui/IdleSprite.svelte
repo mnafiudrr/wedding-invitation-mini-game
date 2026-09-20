@@ -3,6 +3,11 @@
 
   let { art, size = 96, zoom = 1, blinkMin = 4000, blinkMax = 7000 } = $props();
 
+  // Horizontal crop anchor: character is centered at ~51.5% of each 2000px frame.
+  // zoom=1 shows the whole frame (no crop); zoom>1 crops to the top third/half
+  // (head, or chest-to-head) and centers it horizontally.
+  const cx = zoom <= 1 ? 0 : size / 2 - size * zoom * 0.515;
+
   // Random blink: front sheet frame 0 (0-2000px) is the normal pose,
   // frame 1 (2000-4000px) is the closed-eyes blink shown briefly.
   // Frame swap snaps (no transition) for a clean, discrete blink.
@@ -38,7 +43,7 @@
 <div
   class="sprite"
   class:blink={blinking}
-  style="--size: {size}px; --zoom: {zoom}; background-image: url('/sprites/{art}-front.png');"
+  style="--size: {size}px; --zoom: {zoom}; --cx: {cx}px; background-image: url('/sprites/{art}-front.png');"
 ></div>
 
 <style>
@@ -46,12 +51,12 @@
     width: var(--size);
     height: var(--size);
     background-repeat: no-repeat;
-    /* zoom: 1 shows the full frame; zoom: 3 crops to the top third (the head) */
+    /* zoom: 1 = full frame; zoom: 2 = top half (chest to head); zoom: 3 = top third (head) */
     background-size: auto calc(var(--size) * var(--zoom));
-    background-position: 0 0;
+    background-position: var(--cx) 0;
     image-rendering: pixelated;
   }
   .sprite.blink {
-    background-position-x: calc(-1 * var(--size) * var(--zoom));
+    background-position-x: calc(var(--cx) - var(--size) * var(--zoom));
   }
 </style>
