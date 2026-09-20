@@ -62,7 +62,8 @@
     background-position-x: -48px;
   }
   .sprite.walking {
-    /* walk-left sheet: 4 frames at 0 / -48 / -96 / -144px (0-2000 / 2000-4000 / 4000-6000 / 6000-8000px) */
+    /* walk-left sheet: 4 frames of 2000px (scaled to 48px each) at 0-2000 / 2000-4000 / 4000-6000 / 6000-8000px */
+    /* steps(4) with end -192px steps by exactly one frame (48px) per interval */
     animation: walk 0.6s steps(4) infinite;
   }
   /* walk-left art already faces left; flip for rightward movement */
@@ -74,7 +75,7 @@
       background-position-x: 0;
     }
     to {
-      background-position-x: -144px; /* 4 frames x 48px */
+      background-position-x: -192px; /* 4 frames x 48px */
     }
   }
 </style>
