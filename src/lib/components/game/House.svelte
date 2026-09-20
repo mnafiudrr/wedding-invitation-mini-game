@@ -1,12 +1,13 @@
 <script lang="ts">
   import { charX, activeModal } from '$lib/stores/game';
   import { audio } from '$lib/audio/AudioController';
+  import { CHAR_WIDTH, HOUSE_WIDTH, HOUSE_HEIGHT, PROXIMITY_THRESHOLD } from '$lib/data/houses';
 
   let { id, title, x, color } = $props();
 
-  // Character width is 96px, so center is +48
-  // House width is 136px, so center is +68
-  let isNear = $derived(Math.abs(($charX + 48) - (x + 68)) < 170);
+  let isNear = $derived(
+    Math.abs($charX + CHAR_WIDTH / 2 - (x + HOUSE_WIDTH / 2)) < PROXIMITY_THRESHOLD
+  );
 
   function openModal() {
     if (isNear) {
@@ -18,9 +19,9 @@
 
 <!-- svelte-ignore a11y_click_events_have_key_events -->
 <!-- svelte-ignore a11y_no_static_element_interactions -->
-<div 
-  class="house-container" 
-  style="transform: translate3d({x}px, 0, 0);"
+<div
+  class="house-container"
+  style="transform: translate3d({x}px, 0, 0); --hw: {HOUSE_WIDTH}px; --hh: {HOUSE_HEIGHT}px;"
   onclick={openModal}
 >
   <div class="house-label" class:visible={isNear}>
@@ -37,8 +38,8 @@
     position: absolute;
     bottom: 30%; /* Sit on top of the ground */
     left: 0;
-    width: 136px;
-    height: 170px;
+    width: var(--hw);
+    height: var(--hh);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -85,8 +86,8 @@
   }
 
   .door {
-    width: 50px;
-    height: 68px;
+    width: 30%;
+    height: 40%;
     background-color: #8b5a2b;
     border: 3px solid #333;
     border-bottom: none;

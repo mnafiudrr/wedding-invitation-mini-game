@@ -7,7 +7,7 @@
   import Character from '$lib/components/game/Character.svelte';
   import House from '$lib/components/game/House.svelte';
   import Modal from '$lib/components/ui/Modal.svelte';
-  import { houses } from '$lib/data/houses';
+  import { houses, WORLD_WIDTH, CHAR_WIDTH } from '$lib/data/houses';
 
   import BrideGroom from '$lib/components/ui/menus/BrideGroom.svelte';
   import QuranQuotes from '$lib/components/ui/menus/QuranQuotes.svelte';
@@ -51,11 +51,11 @@
     if (moveDirection !== 0 && $gameState === 'playing' && !$activeModal) {
       const speed = 5; // slower, relaxed walk
       let newCharX = $charX + (moveDirection * speed);
-      newCharX = Math.max(0, Math.min(newCharX, 2500 - 96));
+      newCharX = Math.max(0, Math.min(newCharX, WORLD_WIDTH - CHAR_WIDTH));
       charX.set(newCharX, { hard: true });
 
-      let newCameraX = newCharX - (innerWidth / 2) + 48;
-      newCameraX = Math.max(0, Math.min(newCameraX, 2500 - innerWidth));
+      let newCameraX = newCharX - (innerWidth / 2) + (CHAR_WIDTH / 2);
+      newCameraX = Math.max(0, Math.min(newCameraX, WORLD_WIDTH - innerWidth));
       cameraX.set(newCameraX, { hard: true });
 
       const now = performance.now();
