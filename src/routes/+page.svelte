@@ -3,6 +3,7 @@
   import { gameState, selectedCharacter, cameraX, charX, activeModal, isMoving, facing } from '$lib/stores/game';
   import { audio } from '$lib/audio/AudioController';
   import MuteButton from '$lib/components/ui/MuteButton.svelte';
+  import IdleSprite from '$lib/components/ui/IdleSprite.svelte';
   import World from '$lib/components/game/World.svelte';
   import Character from '$lib/components/game/Character.svelte';
   import House from '$lib/components/game/House.svelte';
@@ -94,11 +95,11 @@
     
     <div class="character-selection">
       <button onclick={() => selectCharacter('bride')}>
-        <div class="avatar bride">B</div>
+        <IdleSprite art="women" size={96} />
         <span>Open as Bride</span>
       </button>
       <button onclick={() => selectCharacter('groom')}>
-        <div class="avatar groom">G</div>
+        <IdleSprite art="men" size={96} />
         <span>Open as Groom</span>
       </button>
     </div>
@@ -192,22 +193,6 @@
   button:hover {
     transform: scale(1.1);
   }
-  
-  .avatar {
-    width: 64px;
-    height: 64px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px;
-    font-weight: bold;
-    border: 3px solid #333;
-    background: #fff;
-  }
-  
-  .bride { background-color: #ffb8b8; }
-  .groom { background-color: #b8c0ff; }
   
   .game-container {
     width: 100vw;
