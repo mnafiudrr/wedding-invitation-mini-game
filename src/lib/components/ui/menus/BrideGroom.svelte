@@ -1,16 +1,20 @@
+<script lang="ts">
+  import { COUPLE } from '$lib/data/couple';
+</script>
+
 <div class="menu-content">
   <div class="profile">
-    <div class="avatar bride-color">B</div>
-    <h3>Jean Dea</h3>
-    <p>Daughter of Mr. & Mrs. Dea</p>
+    <div class="avatar bride-color">V</div>
+    <h3>{COUPLE.bride.name}</h3>
+    <p>Putri dari Bapak {COUPLE.bride.parent.split(' & ')[0]} & Ibu {COUPLE.bride.parent.split(' & ')[1]}</p>
   </div>
-  
+
   <div class="ampersand">&</div>
-  
+
   <div class="profile">
-    <div class="avatar groom-color">G</div>
-    <h3>John Doe</h3>
-    <p>Son of Mr. & Mrs. Doe</p>
+    <div class="avatar groom-color">N</div>
+    <h3>{COUPLE.groom.name}</h3>
+    <p>Putra dari Bapak {COUPLE.groom.parent.split(' & ')[0]} & Ibu {COUPLE.groom.parent.split(' & ')[1]}</p>
   </div>
 
   <div class="story">
@@ -43,13 +47,13 @@
   }
   .bride-color { background-color: #ffb8b8; }
   .groom-color { background-color: #b8c0ff; }
-  
+
   .ampersand {
     font-size: 2.5rem;
     font-weight: bold;
     color: #ffb8b8;
   }
-  
+
   .story {
     margin-top: 1rem;
     text-align: center;

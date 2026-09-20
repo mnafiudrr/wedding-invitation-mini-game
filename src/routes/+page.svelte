@@ -9,6 +9,7 @@
   import House from '$lib/components/game/House.svelte';
   import Modal from '$lib/components/ui/Modal.svelte';
   import { houses, WORLD_WIDTH, CHAR_WIDTH } from '$lib/data/houses';
+  import { COUPLE } from '$lib/data/couple';
 
   import BrideGroom from '$lib/components/ui/menus/BrideGroom.svelte';
   import QuranQuotes from '$lib/components/ui/menus/QuranQuotes.svelte';
@@ -95,12 +96,12 @@
     <div class="character-selection">
       <button onclick={() => selectCharacter('bride')}>
         <IdleSprite art="women" size={96} />
-        <span class="name">Jean Dea</span>
+        <span class="name">{COUPLE.bride.name}</span>
       </button>
       <span class="amp">&</span>
       <button onclick={() => selectCharacter('groom')}>
         <IdleSprite art="men" size={96} />
-        <span class="name">John Doe</span>
+        <span class="name">{COUPLE.groom.name}</span>
       </button>
     </div>
   </div>
