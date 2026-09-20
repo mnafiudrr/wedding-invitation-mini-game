@@ -161,7 +161,7 @@
 
   .controls {
     position: absolute;
-    bottom: 2rem;
+    bottom: 50%;
     left: 0;
     width: 100%;
     display: flex;
