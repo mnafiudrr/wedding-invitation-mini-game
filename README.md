@@ -16,11 +16,19 @@ The project ships a `Dockerfile` (multi-stage, `node:24-alpine`) + `docker-compo
 docker compose up -d --build
 ```
 
-- **App** → http://localhost:3000 · **MySQL** → localhost:3306
+- **App** → http://localhost:14001 · **MySQL** → localhost:14002
 - The DB schema is bootstrapped automatically on app start (`scripts/init-db.mjs`, idempotent — safe to run on every boot).
 
-### 1. Set the public URL
-Edit `ORIGIN` in `docker-compose.yml` to the exact URL guests will use, e.g. `http://192.168.1.20:3000` or `https://wedding.example.com`. If you put the app behind a reverse proxy, set `PROTOCOL_HEADER=x-forwarded-proto` and `HOST_HEADER=x-forwarded-host` instead.
+### 1. Configure ports & public URL (`.env`)
+All ports are configurable via `.env` (copy `.env.example`, defaults shown):
+
+```env
+APP_PORT=14001    # web app
+DB_PORT=14002     # MySQL
+ORIGIN=http://localhost:14001
+```
+
+`ORIGIN` must be the exact URL guests will use, e.g. `http://192.168.1.20:14001` or `https://wedding.example.com`. If you put the app behind a reverse proxy, set `PROTOCOL_HEADER=x-forwarded-proto` and `HOST_HEADER=x-forwarded-host` instead.
 
 ### 2. Create an admin account
 ```bash
@@ -47,7 +55,7 @@ docker compose down -v          # stop and delete the database volume
 
 ## Local development
 
-1. Start the database only:
+1. Start the database only (exposed on port 14002 by default):
    ```bash
    docker compose up -d db
    ```
@@ -55,9 +63,9 @@ docker compose down -v          # stop and delete the database volume
    ```bash
    npm install
    ```
-3. Create a `.env` file in the root directory with the connection string:
+3. Create a `.env` file in the root directory with the connection string (note the `DB_PORT`):
    ```env
-   DATABASE_URL="mysql://wedding_user:wedding_password@localhost:3306/wedding"
+   DATABASE_URL="mysql://wedding_user:wedding_password@localhost:14002/wedding"
    ```
 4. Apply the database schema:
    ```bash

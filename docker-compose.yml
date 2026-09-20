@@ -9,7 +9,7 @@ services:
       MYSQL_USER: wedding_user
       MYSQL_PASSWORD: wedding_password
     ports:
-      - "3306:3306"
+      - "${DB_PORT:-14002}:3306"
     volumes:
       - mysql_data:/var/lib/mysql
     healthcheck:
@@ -27,11 +27,11 @@ services:
         condition: service_healthy
     environment:
       DATABASE_URL: "mysql://wedding_user:wedding_password@db:3306/wedding"
-      ORIGIN: "http://localhost:3000"
+      ORIGIN: "${ORIGIN:-http://localhost:14001}"
       PORT: "3000"
       NODE_ENV: production
     ports:
-      - "3000:3000"
+      - "${APP_PORT:-14001}:3000"
 
 volumes:
   mysql_data:
