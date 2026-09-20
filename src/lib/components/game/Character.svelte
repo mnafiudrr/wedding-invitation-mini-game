@@ -68,7 +68,8 @@
     left: 0;
     width: var(--cw);
     height: var(--ch);
-    margin-bottom: calc(var(--cw) / 12);
+    display: flex;
+    align-items: flex-end;
     will-change: transform;
     z-index: 10;
   }
@@ -78,6 +79,8 @@
     background-repeat: no-repeat;
     background-size: auto 100%;
     image-rendering: pixelated;
+    /* close the ~6px of transparent padding under the feet in each frame so they touch the ground */
+    translate: 0 6px;
   }
   /* front sheet: frame 0 = normal pose, frame 1 = blink (2000px cell, scaled to one frame) */
   .sprite.blink {
