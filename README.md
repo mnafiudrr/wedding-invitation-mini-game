@@ -8,26 +8,45 @@ A mobile-first wedding invitation website with UX inspired by classic 2D side-sc
 - **ORM**: Drizzle ORM
 - **Auth**: Session-based (hashed tokens in DB, scrypt passwords) — no external auth library
 
-## Getting Started
+## Deploying with Docker Compose (recommended)
 
-### Option A — Docker Compose (recommended for deploy)
-The project ships a `Dockerfile` + `docker-compose.yml`. One command brings up MySQL **and** the app:
+The project ships a `Dockerfile` (multi-stage, `node:24-alpine`) + `docker-compose.yml`. One command builds and starts **MySQL** and the **app**:
 
 ```bash
 docker compose up -d --build
 ```
 
-- App → http://localhost:3000
-- The schema is bootstrapped automatically on container start (`scripts/init-db.mjs`, idempotent).
-- Create an admin account:
-  ```bash
-  docker compose exec -e ADMIN_USERNAME=admin -e ADMIN_PASSWORD=your-secret-password app \
-    node scripts/create-admin.mjs
-  ```
-  (`scripts/create-admin.mjs` matches the scrypt format used by the app; the local `npm run create-admin` is only for local dev.)
-- `ORIGIN` in `docker-compose.yml` must match the URL guests will use (change it before a real deploy; add `PROTOCOL_HEADER`/`HOST_HEADER` if behind a reverse proxy).
+- **App** → http://localhost:3000 · **MySQL** → localhost:3306
+- The DB schema is bootstrapped automatically on app start (`scripts/init-db.mjs`, idempotent — safe to run on every boot).
 
-### Option B — Local development
+### 1. Set the public URL
+Edit `ORIGIN` in `docker-compose.yml` to the exact URL guests will use, e.g. `http://192.168.1.20:3000` or `https://wedding.example.com`. If you put the app behind a reverse proxy, set `PROTOCOL_HEADER=x-forwarded-proto` and `HOST_HEADER=x-forwarded-host` instead.
+
+### 2. Create an admin account
+```bash
+docker compose exec -e ADMIN_USERNAME=admin -e ADMIN_PASSWORD=your-secret-password app \
+  node scripts/create-admin.mjs
+```
+`scripts/create-admin.mjs` produces hashes in the same scrypt format the app verifies (the local `npm run create-admin` is dev-only). The plaintext password is never stored.
+
+### 3. Verify
+- Open the app and scroll through all sections; pick an avatar to enter the game world.
+- Log in at `/admin` with the account from step 2.
+- Guest messages submitted on the site appear under `/admin/messages` for approval.
+
+### Updating the deployment
+Rebuild and restart with the same command; data persists in the `mysql_data` Docker volume.
+
+### Managing the stack
+```bash
+docker compose logs -f app      # follow app logs
+docker compose ps               # container status
+docker compose down             # stop everything (data kept)
+docker compose down -v          # stop and delete the database volume
+```
+
+## Local development
+
 1. Start the database only:
    ```bash
    docker compose up -d db
@@ -57,13 +76,13 @@ docker compose up -d --build
 ## Using the App
 
 ### Guest side (`/`)
-1. **Title screen** — pick an avatar (Bride or Groom) to enter the world. This first tap also starts background music (browser autoplay policy).
-2. **Move** with the on-screen ← / → buttons (hold to walk).
-3. **Houses** — when you walk near a house it bounces and shows its label; tap it to open its menu:
-   - Bride & Groom, Quran Quotes, Events, Maps, RSVP, Messages, Credits
-4. **RSVP** — submit with an invitation code (duplicate codes are rejected).
-5. **Messages** — guests can leave a message; only **approved** messages appear publicly.
-6. **Mute button** (top-right) — toggles all audio; the choice is remembered in `localStorage`.
+1. **Start page** — a scrollable landing site: hero with the couple's blinking avatars, then one full-screen themed section per house (Bride & Groom, Quran Quotes, Events, Maps, RSVP, Messages, Credits).
+2. **Enter the game** — tap a blinking avatar (Bride/Groom) to drop into the side-scrolling world. This first tap also starts the background music (browser autoplay policy).
+3. **Move** with the on-screen ← / → buttons (hold to walk).
+4. **Houses** — walk near a house and it bounces with its label; tap it to open its menu (same content as the scroll sections).
+5. **RSVP** — submit with an invitation code (duplicate codes are rejected).
+6. **Messages** — guests can leave a message; only **approved** messages appear publicly.
+7. **Mute button** (top-right) — toggles all audio; the choice is remembered in `localStorage`.
 
 ### Admin side (`/admin`)
 1. Go to `/admin/login` and log in with the account created in step 5.
