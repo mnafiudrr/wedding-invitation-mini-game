@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
 
-  let { art, size = 96, blinkMin = 4000, blinkMax = 7000 } = $props();
+  let { art, size = 96, zoom = 1, blinkMin = 4000, blinkMax = 7000 } = $props();
 
   // Random blink: front sheet frame 0 (0-2000px) is the normal pose,
   // frame 1 (2000-4000px) is the closed-eyes blink shown briefly.
@@ -38,7 +38,7 @@
 <div
   class="sprite"
   class:blink={blinking}
-  style="--size: {size}px; background-image: url('/sprites/{art}-front.png');"
+  style="--size: {size}px; --zoom: {zoom}; background-image: url('/sprites/{art}-front.png');"
 ></div>
 
 <style>
@@ -46,10 +46,12 @@
     width: var(--size);
     height: var(--size);
     background-repeat: no-repeat;
-    background-size: auto 100%;
+    /* zoom: 1 shows the full frame; zoom: 3 crops to the top third (the head) */
+    background-size: auto calc(var(--size) * var(--zoom));
+    background-position: 0 0;
     image-rendering: pixelated;
   }
   .sprite.blink {
-    background-position-x: calc(-1 * var(--size));
+    background-position-x: calc(-1 * var(--size) * var(--zoom));
   }
 </style>
