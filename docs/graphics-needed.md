@@ -30,7 +30,7 @@ Facing states are **separate sheets** so each animation maps to exactly one `bac
 
 | Game state | Sheet used | Animation / transform |
 |---|---|---|
-| Idle / modal open / before first move | `{men,women}-front.png` | `steps(2)` blink loop, 0.8s |
+| Idle / modal open / before first move | `{men,women}-front.png` | Frame 0 default; random blink to frame 1 every 5–10s (JS-timed, 180ms) |
 | Moving left | `{men,women}-walk-left.png` | `steps(4)` walk loop, 0.6s, no flip |
 | Moving right | `{men,women}-walk-left.png` + CSS `scaleX(-1)` | same walk loop, flipped |
 
