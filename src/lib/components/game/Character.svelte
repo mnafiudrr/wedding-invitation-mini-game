@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount, onDestroy } from 'svelte';
+  import { onMount } from 'svelte';
   import { charX, selectedCharacter, isMoving, facing } from '$lib/stores/game';
   import { CHAR_WIDTH, CHAR_HEIGHT } from '$lib/data/houses';
 
@@ -7,25 +7,44 @@
 
   // Random blink while idle: front sheet frame 0 (0-2000px) is the normal pose,
   // frame 1 (2000-4000px) is the closed-eyes blink shown briefly every 5-10s.
+  // The frame swap snaps (no transition) so it reads as a discrete blink, and the
+  // blink state is reset whenever movement starts so it can't leak into the walk.
   let blinking = $state(false);
-  let blinkTimer: ReturnType<typeof setTimeout> | undefined;
-  let unblinkTimer: ReturnType<typeof setTimeout> | undefined;
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  let pending: 'idle' | 'blink' | null = null;
 
-  function scheduleBlink() {
+  function scheduleIdle() {
+    if (pending !== null) return;
+    pending = 'idle';
     const delay = 5000 + Math.random() * 5000; // random 5-10s
-    blinkTimer = setTimeout(() => {
+    timer = setTimeout(() => {
+      if (pending !== 'idle') return;
       blinking = true;
-      unblinkTimer = setTimeout(() => {
+      pending = 'blink';
+      timer = setTimeout(() => {
+        if (pending !== 'blink') return;
         blinking = false;
-        scheduleBlink();
+        pending = null;
+        scheduleIdle();
       }, 180);
     }, delay);
   }
 
-  onMount(scheduleBlink);
-  onDestroy(() => {
-    if (blinkTimer) clearTimeout(blinkTimer);
-    if (unblinkTimer) clearTimeout(unblinkTimer);
+  onMount(() => {
+    scheduleIdle();
+    const unsub = isMoving.subscribe((moving) => {
+      if (moving) {
+        if (timer) clearTimeout(timer);
+        pending = null;
+        blinking = false;
+      } else if (pending === null) {
+        scheduleIdle();
+      }
+    });
+    return () => {
+      unsub();
+      if (timer) clearTimeout(timer);
+    };
   });
 </script>
 
@@ -59,7 +78,6 @@
     background-repeat: no-repeat;
     background-size: auto 100%;
     image-rendering: pixelated;
-    transition: background-position-x 0.05s;
   }
   /* front sheet: frame 0 = normal pose, frame 1 = blink (2000px cell, scaled to one frame) */
   .sprite.blink {
