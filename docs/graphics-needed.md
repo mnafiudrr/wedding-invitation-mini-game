@@ -15,32 +15,29 @@ Companion to `docs/tasks/05-*` and `docs/rules/06-performance-rules.md`. This is
 
 ---
 
-## 1. Characters (`static/sprites/`) — **8 PNG files total**
+## 1. Characters (`static/sprites/`) — **4 PNG files total (FINAL ART PROVIDED)**
 
-Sprite sheets = horizontal strips, fixed frame size, transparent bg.
-Facing states are **separate sheets** so each animation maps to exactly one `background-image` + one `steps()` keyframe (no position math across mixed facings).
+Facing states are **separate sheets** so each animation maps to exactly one `background-image` + one `steps()` keyframe.
 
-### Per character (bride & groom identical spec) — 4 files each
+### Current files (already in repo)
 
-| File | Frames | Strip size | Purpose |
-|---|---|---|---|
-| `char-bride-front.png` | **2** | 96×48 (2 × 48px) | Front-facing idle shown whenever NOT moving (standing, modal open, title spawn). Frame 2 = subtle breathe/blink |
-| `char-bride-walk.png` | **6** | 288×48 (6 × 48px) | Right-facing walk cycle, played via `animation: ... steps(6)` |
-| `char-groom-front.png` | **2** | 96×48 | Same as bride front |
-| `char-groom-walk.png` | **6** | 288×48 | Same as bride walk |
+| File | Frames | Cell size | Strip size | Used when |
+|---|---|---|---|---|
+| `men-front.png` / `women-front.png` | **2** | 2000×2000 | 4000×2000 | Idle, NOT moving — facing the camera |
+| `men-walk-left.png` / `women-walk-left.png` | **4** | 2000×2000 | 8000×2000 | Moving — art already faces **left** |
 
-### State → asset mapping (implement in `Character.svelte`, task 05-2)
+### State → asset mapping (implemented in `Character.svelte`, task 05-2)
 
-| Game state | Sheet used | Animation |
+| Game state | Sheet used | Animation / transform |
 |---|---|---|
-| Idle / modal open / before first move | `char-*-front.png` | 2-frame loop at ~0.8s (`steps(2)`) or static frame 0 |
-| Moving right | `char-*-walk.png` | `steps(6) infinite`, ~0.5s cycle |
-| Moving left | `char-*-walk.png` + CSS `scaleX(-1)` on inner wrapper | same |
+| Idle / modal open / before first move | `{men,women}-front.png` | `steps(2)` blink loop, 0.8s |
+| Moving left | `{men,women}-walk-left.png` | `steps(4)` walk loop, 0.6s, no flip |
+| Moving right | `{men,women}-walk-left.png` + CSS `scaleX(-1)` | same walk loop, flipped |
 
 Notes:
-- Walk art faces **right** by default; left-facing is a CSS flip — do NOT export mirrored sheets.
-- Front and walk frames must share the same baseline/foot position so switching sheets causes no visual jump.
-- Optional stretch goal: append 2 celebrate/jump frames as a third sheet only if a "thank you" moment is added later.
+- Walk sheets are pre-flipped to face **left**; rightward movement is a CSS flip (do NOT export mirrored sheets).
+- All frames are 1:1 cells; the character is centered within each cell with transparent margins.
+- To replace: keep the same filenames, frame counts, and cell alignment — no code changes needed.
 
 ## 2. Houses (`static/houses/`) — task 05-3
 
@@ -124,10 +121,10 @@ Everything else (forms, quotes, lists) uses fonts + CSS borders.
 
 ## Checklist
 
-- [ ] char-bride-front.png (2 frames)
-- [ ] char-bride-walk.png (6 frames)
-- [ ] char-groom-front.png (2 frames)
-- [ ] char-groom-walk.png (6 frames)
+- [x] men-front.png (2 frames) — provided
+- [x] men-walk-left.png (4 frames) — provided
+- [x] women-front.png (2 frames) — provided
+- [x] women-walk-left.png (4 frames) — provided
 - [ ] house-bride-groom.png
 - [ ] house-quran-quotes.png
 - [ ] house-events.png

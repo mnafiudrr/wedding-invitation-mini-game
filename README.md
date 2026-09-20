@@ -69,14 +69,10 @@ All image/sound files live under `static/`. Specs (sizes, frame counts, naming) 
 ### Character sprites (`static/sprites/`)
 | File | Layout |
 |---|---|
-| `char-bride-front.png`, `char-groom-front.png` | 2 frames of 48×48 (96×48 strip) — idle facing the camera, frame 2 = blink |
-| `char-bride-walk.png`, `char-groom-walk.png` | 6 frames of 48×48 (288×48 strip) — right-facing walk cycle |
+| `men-front.png`, `women-front.png` | 2 frames of 2000×2000 (4000×2000 strip) — idle, facing the camera, frame 2 = blink |
+| `men-walk-left.png`, `women-walk-left.png` | 4 frames of 2000×2000 (8000×2000 strip) — walk cycle, art faces left (CSS flip for rightward movement) |
 
-To swap in final art: export PNGs with the **same filenames and frame counts** — no code changes needed.
-To regenerate the current placeholders:
-```bash
-node scripts/generate-placeholder-sprites.mjs
-```
+`men-*` is the Groom, `women-*` is the Bride. To swap in final art: export PNGs with the **same filenames, frame counts, and cell alignment** — no code changes needed.
 
 ### Houses, backgrounds, icons (`static/houses/`, `static/bg/`, `static/ui/`)
 Drop-in replacements per `docs/graphics-needed.md`. Houses are 68×85 px; background tiles must repeat seamlessly horizontally.
