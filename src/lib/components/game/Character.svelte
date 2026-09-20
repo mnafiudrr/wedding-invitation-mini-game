@@ -43,28 +43,28 @@
     position: absolute;
     bottom: 30%; /* Sit on top of the ground */
     left: 0;
-    width: 48px;
-    height: 64px;
-    margin-bottom: 4px;
+    width: 96px;
+    height: 128px;
+    margin-bottom: 8px;
     will-change: transform;
     z-index: 10;
   }
   .sprite {
-    width: 48px;
-    height: 48px;
+    width: 96px;
+    height: 96px;
     background-repeat: no-repeat;
     background-size: auto 100%;
     image-rendering: pixelated;
     transition: background-position-x 0.05s;
   }
-  /* front sheet: frame 0 = normal pose, frame 1 = blink (2000px cell, scaled to 48px) */
+  /* front sheet: frame 0 = normal pose, frame 1 = blink (2000px cell, scaled to 96px) */
   .sprite.blink {
-    background-position-x: -48px;
+    background-position-x: -96px;
   }
   .sprite.walking {
-    /* walk-left sheet: 4 frames of 2000px (scaled to 48px each) at 0-2000 / 2000-4000 / 4000-6000 / 6000-8000px */
-    /* steps(4) with end -192px steps by exactly one frame (48px) per interval */
-    animation: walk 0.6s steps(4) infinite;
+    /* walk-left sheet: 4 frames of 2000px (scaled to 96px each) at 0-2000 / 2000-4000 / 4000-6000 / 6000-8000px */
+    /* steps(4) with end -384px steps by exactly one frame (96px) per interval */
+    animation: walk 0.8s steps(4) infinite;
   }
   /* walk-left art already faces left; flip for rightward movement */
   .sprite.flip {
@@ -75,7 +75,7 @@
       background-position-x: 0;
     }
     to {
-      background-position-x: -192px; /* 4 frames x 48px */
+      background-position-x: -384px; /* 4 frames x 96px */
     }
   }
 </style>

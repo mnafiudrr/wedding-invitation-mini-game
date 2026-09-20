@@ -4,9 +4,9 @@
 
   let { id, title, x, color } = $props();
 
-  // Character width is 48px, so center is +24
-  // House width is 68px, so center is +34
-  let isNear = $derived(Math.abs(($charX + 24) - (x + 34)) < 100);
+  // Character width is 96px, so center is +48
+  // House width is 136px, so center is +68
+  let isNear = $derived(Math.abs(($charX + 48) - (x + 68)) < 170);
 
   function openModal() {
     if (isNear) {
@@ -37,8 +37,8 @@
     position: absolute;
     bottom: 30%; /* Sit on top of the ground */
     left: 0;
-    width: 68px;
-    height: 85px;
+    width: 136px;
+    height: 170px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -49,14 +49,14 @@
 
   .house-label {
     position: absolute;
-    top: -40px;
+    top: -56px;
     background: rgba(255, 255, 255, 0.9);
-    padding: 4px 8px;
+    padding: 8px 12px;
     border-radius: 8px;
     font-weight: bold;
-    font-size: 0.9rem;
+    font-size: 1.1rem;
     white-space: nowrap;
-    border: 2px solid #333;
+    border: 3px solid #333;
     opacity: 0;
     transform: translateY(10px);
     transition: opacity 0.3s, transform 0.3s;
@@ -71,8 +71,8 @@
   .house {
     width: 100%;
     height: 100%;
-    border: 3px solid #333;
-    border-radius: 4px 4px 0 0;
+    border: 4px solid #333;
+    border-radius: 6px 6px 0 0;
     position: relative;
     display: flex;
     justify-content: center;
@@ -81,15 +81,15 @@
   }
 
   .bouncing {
-    transform: scale(1.05) translateY(-5px);
+    transform: scale(1.05) translateY(-8px);
   }
 
   .door {
-    width: 25px;
-    height: 34px;
+    width: 50px;
+    height: 68px;
     background-color: #8b5a2b;
-    border: 2px solid #333;
+    border: 3px solid #333;
     border-bottom: none;
-    border-radius: 4px 4px 0 0;
+    border-radius: 6px 6px 0 0;
   }
 </style>

@@ -49,12 +49,12 @@
 
   function updatePosition() {
     if (moveDirection !== 0 && $gameState === 'playing' && !$activeModal) {
-      const speed = 10; // Increased speed slightly for better feel
+      const speed = 5; // slower, relaxed walk
       let newCharX = $charX + (moveDirection * speed);
-      newCharX = Math.max(0, Math.min(newCharX, 2500 - 48));
+      newCharX = Math.max(0, Math.min(newCharX, 2500 - 96));
       charX.set(newCharX, { hard: true });
 
-      let newCameraX = newCharX - (innerWidth / 2) + 24;
+      let newCameraX = newCharX - (innerWidth / 2) + 48;
       newCameraX = Math.max(0, Math.min(newCameraX, 2500 - innerWidth));
       cameraX.set(newCameraX, { hard: true });
 
