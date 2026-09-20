@@ -91,16 +91,16 @@
   <MuteButton />
   <div class="title-screen">
     <h1>Wedding Invitation</h1>
-    <div class="subtitle">John Doe & Jean Dea</div>
-    
+
     <div class="character-selection">
       <button onclick={() => selectCharacter('bride')}>
         <IdleSprite art="women" size={96} />
-        <span>Open as Bride</span>
+        <span class="name">Jean Dea</span>
       </button>
+      <span class="amp">&</span>
       <button onclick={() => selectCharacter('groom')}>
         <IdleSprite art="men" size={96} />
-        <span>Open as Groom</span>
+        <span class="name">John Doe</span>
       </button>
     </div>
   </div>
@@ -169,12 +169,19 @@
     color: #333;
     text-align: center;
   }
-  h1 { font-size: 2rem; margin-bottom: 0.5rem; }
-  .subtitle { font-size: 1.2rem; margin-bottom: 3rem; }
+  h1 { font-size: 2rem; margin-bottom: 3rem; }
   
   .character-selection {
     display: flex;
-    gap: 2rem;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .amp {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #333;
+    transform: translateY(-20px);
   }
   
   button {
@@ -188,6 +195,11 @@
     font-family: inherit;
     font-size: 1rem;
     transition: transform 0.2s;
+  }
+
+  .name {
+    font-size: 1.2rem;
+    font-weight: bold;
   }
   
   button:hover {
