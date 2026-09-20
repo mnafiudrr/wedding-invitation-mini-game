@@ -3,13 +3,12 @@
   import { gameState, selectedCharacter, cameraX, charX, activeModal, isMoving, facing } from '$lib/stores/game';
   import { audio } from '$lib/audio/AudioController';
   import MuteButton from '$lib/components/ui/MuteButton.svelte';
-  import IdleSprite from '$lib/components/ui/IdleSprite.svelte';
+  import Home from '$lib/components/home/Home.svelte';
   import World from '$lib/components/game/World.svelte';
   import Character from '$lib/components/game/Character.svelte';
   import House from '$lib/components/game/House.svelte';
   import Modal from '$lib/components/ui/Modal.svelte';
   import { houses, WORLD_WIDTH, CHAR_WIDTH } from '$lib/data/houses';
-  import { COUPLE } from '$lib/data/couple';
 
   import BrideGroom from '$lib/components/ui/menus/BrideGroom.svelte';
   import QuranQuotes from '$lib/components/ui/menus/QuranQuotes.svelte';
@@ -90,21 +89,7 @@
 
 {#if $gameState === 'title'}
   <MuteButton />
-  <div class="title-screen">
-    <h1>Wedding Invitation</h1>
-
-    <div class="character-selection">
-      <button onclick={() => selectCharacter('bride')}>
-        <IdleSprite art="women" size={96} />
-        <span class="name">{COUPLE.bride.name}</span>
-      </button>
-      <span class="amp">&</span>
-      <button onclick={() => selectCharacter('groom')}>
-        <IdleSprite art="men" size={96} />
-        <span class="name">{COUPLE.groom.name}</span>
-      </button>
-    </div>
-  </div>
+  <Home onselect={selectCharacter} />
 {:else if $gameState === 'playing'}
   <MuteButton />
   <div class="game-container">
@@ -160,53 +145,6 @@
 {/if}
 
 <style>
-  .title-screen {
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background-color: var(--bg-sky);
-    color: #333;
-    text-align: center;
-  }
-  h1 { font-size: 2rem; margin-bottom: 3rem; }
-  
-  .character-selection {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-  }
-
-  .amp {
-    font-size: 2.5rem;
-    font-weight: bold;
-    color: #333;
-    transform: translateY(-20px);
-  }
-  
-  button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-    font-family: inherit;
-    font-size: 1rem;
-    transition: transform 0.2s;
-  }
-
-  .name {
-    font-size: 1.2rem;
-    font-weight: bold;
-  }
-  
-  button:hover {
-    transform: scale(1.1);
-  }
-  
   .game-container {
     width: 100vw;
     height: 100vh;
