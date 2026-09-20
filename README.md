@@ -10,38 +10,49 @@ A mobile-first wedding invitation website with UX inspired by classic 2D side-sc
 
 ## Getting Started
 
-### 1. Start the Database
-Ensure you have Docker and Docker Compose installed.
+### Option A — Docker Compose (recommended for deploy)
+The project ships a `Dockerfile` + `docker-compose.yml`. One command brings up MySQL **and** the app:
+
 ```bash
-docker-compose up -d
+docker compose up -d --build
 ```
 
-### 2. Install Dependencies
-```bash
-npm install
-```
+- App → http://localhost:3000
+- The schema is bootstrapped automatically on container start (`scripts/init-db.mjs`, idempotent).
+- Create an admin account:
+  ```bash
+  docker compose exec -e ADMIN_USERNAME=admin -e ADMIN_PASSWORD=your-secret-password app \
+    node scripts/create-admin.mjs
+  ```
+  (`scripts/create-admin.mjs` matches the scrypt format used by the app; the local `npm run create-admin` is only for local dev.)
+- `ORIGIN` in `docker-compose.yml` must match the URL guests will use (change it before a real deploy; add `PROTOCOL_HEADER`/`HOST_HEADER` if behind a reverse proxy).
 
-### 3. Environment Variables
-Create a `.env` file in the root directory and add the following connection string:
-```env
-DATABASE_URL="mysql://wedding_user:wedding_password@localhost:3306/wedding"
-```
-
-### 4. Apply the Database Schema
-```bash
-npx drizzle-kit push
-```
-
-### 5. Create an Admin Account
-```bash
-ADMIN_USERNAME=admin ADMIN_PASSWORD=your-secret-password npm run create-admin
-```
-The password is stored as a salted scrypt hash — the plaintext is never persisted.
-
-### 6. Run the Development Server
-```bash
-npm run dev -- --open
-```
+### Option B — Local development
+1. Start the database only:
+   ```bash
+   docker compose up -d db
+   ```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Create a `.env` file in the root directory with the connection string:
+   ```env
+   DATABASE_URL="mysql://wedding_user:wedding_password@localhost:3306/wedding"
+   ```
+4. Apply the database schema:
+   ```bash
+   npx drizzle-kit push
+   ```
+5. Create an admin account:
+   ```bash
+   ADMIN_USERNAME=admin ADMIN_PASSWORD=your-secret-password npm run create-admin
+   ```
+   The password is stored as a salted scrypt hash — the plaintext is never persisted.
+6. Run the development server:
+   ```bash
+   npm run dev -- --open
+   ```
 
 ## Using the App
 
@@ -91,9 +102,9 @@ node scripts/generate-placeholder-audio.mjs   # regenerate placeholder sounds
 
 ## Building
 
-To create a production version of your app:
+To create a production version of your app (uses `@sveltejs/adapter-node`):
 ```bash
 npm run build
 ```
 
-You can preview the production build with `npm run preview`.
+You can preview the production build with `npm run preview`. For deployable containers use `docker compose up -d --build`.

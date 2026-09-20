@@ -1,0 +1,16 @@
+node_modules
+build
+.svelte-kit
+drizzle
+.env
+.env.*
+*.log
+.git
+.gitignore
+docs
+README.md
+.vscode
+.npmrc
+Dockerfile
+.dockerignore
+docker-compose.yml
