@@ -126,7 +126,7 @@
     <div class="game-scale" style="--scale: {scale}">
       <World>
         {#each houses as house}
-          <House id={house.id} title={house.title} x={house.x} color={house.color} />
+          <House id={house.id} title={house.title} x={house.x} color={house.color} image={house.image} />
         {/each}
         <Character />
       </World>

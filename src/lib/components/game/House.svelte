@@ -3,7 +3,7 @@
   import { audio } from '$lib/audio/AudioController';
   import { CHAR_WIDTH, HOUSE_WIDTH, HOUSE_HEIGHT, PROXIMITY_THRESHOLD } from '$lib/data/houses';
 
-  let { id, title, x, color } = $props();
+  let { id, title, x, color, image } = $props();
 
   let isNear = $derived(
     Math.abs($charX + CHAR_WIDTH / 2 - (x + HOUSE_WIDTH / 2)) < PROXIMITY_THRESHOLD
@@ -27,9 +27,17 @@
   <div class="house-label" class:visible={isNear}>
     {title}
   </div>
-  <div class="house" class:bouncing={isNear} style="background-color: {color};">
-    <!-- Door -->
-    <div class="door"></div>
+  <div
+    class="house"
+    class:bouncing={isNear}
+    class:has-image={!!image}
+    style:background-image={image ? `url('/buildings/${image}')` : undefined}
+    style:background-color={image ? undefined : color}
+  >
+    {#if !image}
+      <!-- Door (fallback for houses without artwork) -->
+      <div class="door"></div>
+    {/if}
   </div>
 </div>
 
@@ -72,13 +80,19 @@
   .house {
     width: 100%;
     height: 100%;
-    border: 4px solid #333;
-    border-radius: 6px 6px 0 0;
     position: relative;
     display: flex;
     justify-content: center;
     align-items: flex-end;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: bottom center;
     transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  .house:not(.has-image) {
+    border: 4px solid #333;
+    border-radius: 6px 6px 0 0;
   }
 
   .bouncing {
