@@ -1,9 +1,13 @@
 <script lang="ts">
   import { cameraX } from '$lib/stores/game';
+  import { WORLD_WIDTH } from '$lib/data/houses';
   let { children } = $props();
 </script>
 
-<div class="world" style="transform: translate3d({-$cameraX}px, 0, 0);">
+<div
+  class="world"
+  style="transform: translate3d({-$cameraX}px, 0, 0); --ww: {WORLD_WIDTH}px;"
+>
   <div class="sky"></div>
   <div class="ground"></div>
   {@render children()}
@@ -14,9 +18,9 @@
     position: absolute;
     top: 0;
     left: 0;
-    height: 100vh;
-    /* Wide world */
-    width: 2500px; 
+    height: 100%;
+    /* Wide world (design units, scaled to fit by the game container) */
+    width: var(--ww);
     will-change: transform;
   }
   .sky {

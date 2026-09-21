@@ -28,10 +28,42 @@
     'credits': Credits
   };
 
-  let innerWidth = $state(0);
   let moveDirection = $state<0 | -1 | 1>(0);
   let animationFrameId: number;
   let lastStepTime = 0;
+
+  // ---- Responsive scale-to-fit ----
+  // The game is designed on a fixed base canvas (BASE_W x BASE_H) and scaled to fit
+  // the visual viewport. Using window.visualViewport (instead of innerWidth/100vh)
+  // keeps the game identical across phones and in-app browsers (Chrome/Brave/Telegram),
+  // because it reflects the real rendered area including browser zoom and chrome.
+  const BASE_W = 400;
+  const BASE_H = 800;
+  let vw = $state(BASE_W);
+  let vh = $state(BASE_H);
+  const scale = $derived(Math.min(vw / BASE_W, vh / BASE_H));
+
+  function measureViewport() {
+    if (typeof window === 'undefined') return;
+    const vv = window.visualViewport;
+    vw = vv ? vv.width : window.innerWidth;
+    vh = vv ? vv.height : window.innerHeight;
+  }
+
+  onMount(() => {
+    measureViewport();
+    const vv = window.visualViewport;
+    window.addEventListener('resize', measureViewport);
+    window.addEventListener('orientationchange', measureViewport);
+    vv?.addEventListener('resize', measureViewport);
+    vv?.addEventListener('scroll', measureViewport);
+    return () => {
+      window.removeEventListener('resize', measureViewport);
+      window.removeEventListener('orientationchange', measureViewport);
+      vv?.removeEventListener('resize', measureViewport);
+      vv?.removeEventListener('scroll', measureViewport);
+    };
+  });
 
   function selectCharacter(char: 'bride' | 'groom') {
     audio.init(); // inside this click gesture (autoplay policy)
@@ -55,8 +87,8 @@
       newCharX = Math.max(0, Math.min(newCharX, WORLD_WIDTH - CHAR_WIDTH));
       charX.set(newCharX, { hard: true });
 
-      let newCameraX = newCharX - (innerWidth / 2) + (CHAR_WIDTH / 2);
-      newCameraX = Math.max(0, Math.min(newCameraX, WORLD_WIDTH - innerWidth));
+      let newCameraX = newCharX - (BASE_W / 2) + (CHAR_WIDTH / 2);
+      newCameraX = Math.max(0, Math.min(newCameraX, WORLD_WIDTH - BASE_W));
       cameraX.set(newCameraX, { hard: true });
 
       const now = performance.now();
@@ -85,49 +117,49 @@
   }
 </script>
 
-<svelte:window bind:innerWidth />
-
 {#if $gameState === 'title'}
   <MuteButton />
   <Home onselect={selectCharacter} />
 {:else if $gameState === 'playing'}
   <MuteButton />
   <div class="game-container">
-    <World>
-      {#each houses as house}
-        <House id={house.id} title={house.title} x={house.x} color={house.color} />
-      {/each}
-      <Character />
-    </World>
+    <div class="game-scale" style="--scale: {scale}">
+      <World>
+        {#each houses as house}
+          <House id={house.id} title={house.title} x={house.x} color={house.color} />
+        {/each}
+        <Character />
+      </World>
 
-    {#if !$activeModal}
-      <div class="controls">
-        <button 
-          class="control-btn" 
-          ontouchstart={(e) => { e.preventDefault(); startMove(-1); }}
-          onmousedown={() => startMove(-1)}
-          ontouchend={stopMove}
-          onmouseup={stopMove}
-          onmouseleave={stopMove}
-          ontouchcancel={stopMove}
-          oncontextmenu={(e) => e.preventDefault()}
-        >
-          ←
-        </button>
-        <button 
-          class="control-btn" 
-          ontouchstart={(e) => { e.preventDefault(); startMove(1); }}
-          onmousedown={() => startMove(1)}
-          ontouchend={stopMove}
-          onmouseup={stopMove}
-          onmouseleave={stopMove}
-          ontouchcancel={stopMove}
-          oncontextmenu={(e) => e.preventDefault()}
-        >
-          →
-        </button>
-      </div>
-    {/if}
+      {#if !$activeModal}
+        <div class="controls">
+          <button
+            class="control-btn"
+            ontouchstart={(e) => { e.preventDefault(); startMove(-1); }}
+            onmousedown={() => startMove(-1)}
+            ontouchend={stopMove}
+            onmouseup={stopMove}
+            onmouseleave={stopMove}
+            ontouchcancel={stopMove}
+            oncontextmenu={(e) => e.preventDefault()}
+          >
+            ←
+          </button>
+          <button
+            class="control-btn"
+            ontouchstart={(e) => { e.preventDefault(); startMove(1); }}
+            onmousedown={() => startMove(1)}
+            ontouchend={stopMove}
+            onmouseup={stopMove}
+            onmouseleave={stopMove}
+            ontouchcancel={stopMove}
+            oncontextmenu={(e) => e.preventDefault()}
+          >
+            →
+          </button>
+        </div>
+      {/if}
+    </div>
   </div>
 
   {#if $activeModal}
@@ -148,8 +180,21 @@
   .game-container {
     width: 100vw;
     height: 100vh;
+    height: 100dvh;
     position: relative;
     overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #74b9ff;
+  }
+
+  .game-scale {
+    position: relative;
+    width: 400px;
+    height: 800px;
+    flex: none;
+    transform: scale(var(--scale));
   }
 
   .placeholder-content {
