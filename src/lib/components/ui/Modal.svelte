@@ -30,12 +30,15 @@
     left: 0;
     width: 100vw;
     height: 100vh;
+    height: 100dvh;
     background: rgba(255, 255, 255, 0.2);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
     display: flex;
     align-items: center;
     justify-content: center;
+    /* keep the popup above browser bottom bars / safe areas */
+    padding: 1.25rem 1.25rem max(env(safe-area-inset-bottom, 0px), 1.25rem);
     z-index: 100;
   }
 
@@ -43,7 +46,7 @@
     background: #fff;
     width: 90%;
     max-width: 500px;
-    max-height: 80vh;
+    max-height: calc(100dvh - env(safe-area-inset-bottom, 0px) - 2.5rem);
     border-radius: 16px;
     box-shadow: 0 10px 25px rgba(0,0,0,0.1);
     display: flex;

@@ -47,7 +47,8 @@
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
-    height: 60vh;
+    height: 55vh;
+    height: 55dvh;
   }
   
   .message-list {
