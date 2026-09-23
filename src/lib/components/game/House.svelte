@@ -3,10 +3,10 @@
   import { audio } from '$lib/audio/AudioController';
   import { CHAR_WIDTH, HOUSE_WIDTH, HOUSE_HEIGHT, PROXIMITY_THRESHOLD } from '$lib/data/houses';
 
-  let { id, title, x, color, image } = $props();
+  let { id, title, x, color, image, scale = 1 } = $props();
 
   let isNear = $derived(
-    Math.abs($charX + CHAR_WIDTH / 2 - (x + HOUSE_WIDTH / 2)) < PROXIMITY_THRESHOLD
+    Math.abs($charX + CHAR_WIDTH / 2 - (x + (HOUSE_WIDTH * scale) / 2)) < PROXIMITY_THRESHOLD
   );
 
   function openModal() {
@@ -21,7 +21,7 @@
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <div
   class="house-container"
-  style="transform: translate3d({x}px, 0, 0); --hw: {HOUSE_WIDTH}px; --hh: {HOUSE_HEIGHT}px;"
+  style="transform: translate3d({x}px, 0, 0); --hw: {HOUSE_WIDTH * scale}px; --hh: {HOUSE_HEIGHT * scale}px;"
   onclick={openModal}
 >
   <div class="house-label" class:visible={isNear}>

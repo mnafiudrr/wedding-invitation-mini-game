@@ -4,6 +4,7 @@ export interface HouseData {
   x: number;
   color: string;
   image?: string;
+  scale?: number;
 }
 
 // World / entity sizing — single source of truth for game dimensions.
@@ -15,11 +16,11 @@ export const HOUSE_HEIGHT = 200;
 export const PROXIMITY_THRESHOLD = 200;
 
 export const houses: HouseData[] = [
-  { id: 'bride-groom', title: 'Bride & Groom', x: 320, color: '#ffb3ba', image: 'bride-groom.png' },
-  { id: 'quran-quotes', title: 'Quran Quotes', x: 720, color: '#ffdfba', image: 'quran.png' },
+  { id: 'bride-groom', title: 'Bride & Groom', x: 320, color: '#ffb3ba', image: 'bride-groom.png', scale: 1.4 },
+  { id: 'quran-quotes', title: 'Quran Quotes', x: 720, color: '#ffdfba', image: 'quran.png', scale: 0.5 },
   { id: 'events', title: 'Events', x: 1120, color: '#ffffba', image: 'event.png' },
   { id: 'maps', title: 'Maps', x: 1520, color: '#baffc9', image: 'map.png' },
-  { id: 'rsvp', title: 'RSVP', x: 1920, color: '#bae1ff', image: 'rsvp.png' },
-  { id: 'messages', title: 'Messages', x: 2320, color: '#e6b3ff', image: 'message.png' },
+  { id: 'rsvp', title: 'RSVP', x: 1920, color: '#bae1ff', image: 'rsvp.png', scale: 0.8 },
+  { id: 'messages', title: 'Messages', x: 2320, color: '#e6b3ff', image: 'message.png', scale: 0.5 },
   { id: 'credits', title: 'Credits', x: 2720, color: '#ffd1dc' }
 ];

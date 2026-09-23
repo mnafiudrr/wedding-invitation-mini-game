@@ -9,9 +9,9 @@
 
   // Fixed ground decorations (particles/*.png, 1000x1000 each).
   const groundDecor = [
-    { kind: 'tree', x: 80, w: 110 },
-    { kind: 'tree', x: 1500, w: 120 },
-    { kind: 'tree', x: 2720, w: 110 },
+    { kind: 'tree', x: 80, w: 220 },
+    { kind: 'tree', x: 1500, w: 240 },
+    { kind: 'tree', x: 2720, w: 220 },
     { kind: 'semak', x: 320, w: 70 },
     { kind: 'semak', x: 880, w: 75 },
     { kind: 'semak', x: 1620, w: 70 },
