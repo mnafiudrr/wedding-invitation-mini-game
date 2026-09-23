@@ -44,7 +44,7 @@
 <style>
   .house-container {
     position: absolute;
-    bottom: 71%; /* Sit on top of the ground (ground is 71% tall) */
+    bottom: 30%; /* Sit on top of the ground */
     left: 0;
     width: var(--hw);
     height: var(--hh);

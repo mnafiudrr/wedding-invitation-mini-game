@@ -62,7 +62,7 @@
     position: absolute;
     top: 0;
     width: 100%;
-    height: 29%;
+    height: 70%;
     background: linear-gradient(to bottom, #74b9ff, #b3dcfd);
   }
   .ground {
@@ -94,7 +94,7 @@
   .decor.tree,
   .decor.semak,
   .decor.tanaman {
-    bottom: 71%;
+    bottom: 30%;
     background-position: bottom center;
   }
   .decor.tree {

@@ -64,7 +64,7 @@
 <style>
   .character {
     position: absolute;
-    bottom: 71%; /* Sit on top of the ground (ground is 71% tall) */
+    bottom: 30%; /* Sit on top of the ground */
     left: 0;
     width: var(--cw);
     height: var(--ch);
