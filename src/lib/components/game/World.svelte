@@ -3,8 +3,12 @@
   import { WORLD_WIDTH } from '$lib/data/houses';
   let { children } = $props();
 
-  // Decorative scenery scattered across the world (particles/*.png, 1000x1000 each).
-  const decor = [
+  function rand(min: number, max: number) {
+    return min + Math.random() * (max - min);
+  }
+
+  // Fixed ground decorations (particles/*.png, 1000x1000 each).
+  const groundDecor = [
     { kind: 'tree', x: 80, w: 110 },
     { kind: 'tree', x: 1500, w: 120 },
     { kind: 'tree', x: 2720, w: 110 },
@@ -15,11 +19,20 @@
     { kind: 'tanaman', x: 500, w: 55 },
     { kind: 'tanaman', x: 1220, w: 55 },
     { kind: 'tanaman', x: 1960, w: 55 },
-    { kind: 'tanaman', x: 2620, w: 60 },
-    { kind: 'cloud', x: 140, w: 140 },
-    { kind: 'cloud', x: 920, w: 170 },
-    { kind: 'cloud', x: 1780, w: 150 },
-    { kind: 'cloud', x: 2520, w: 180 }
+    { kind: 'tanaman', x: 2620, w: 60 }
+  ];
+
+  // Multiple clouds from particles/cloud.png at random positions and sizes.
+  const clouds = Array.from({ length: 9 }, () => ({
+    kind: 'cloud',
+    x: Math.round(rand(20, WORLD_WIDTH - 240)),
+    w: Math.round(rand(90, 210)),
+    top: Math.round(rand(4, 32))
+  }));
+
+  const decor: { kind: string; x: number; w: number; top?: number }[] = [
+    ...clouds,
+    ...groundDecor
   ];
 </script>
 
@@ -28,10 +41,9 @@
   style="transform: translate3d({-$cameraX}px, 0, 0); --ww: {WORLD_WIDTH}px;"
 >
   <div class="sky"></div>
-  <div class="clouds"></div>
   <div class="ground"></div>
   {#each decor as d, i (i)}
-    <div class="decor {d.kind}" style="--x: {d.x}px; --w: {d.w}px;"></div>
+    <div class="decor {d.kind}" style="--x: {d.x}px; --w: {d.w}px; --top: {d.top}%;"></div>
   {/each}
   {@render children()}
 </div>
@@ -53,27 +65,16 @@
     height: 70%;
     background: linear-gradient(to bottom, #74b9ff, #b3dcfd);
   }
-  /* Far cloud band from backgrounds/cloud.png (cover crops to the painted band) */
-  .clouds {
-    position: absolute;
-    top: 0;
-    width: 100%;
-    height: 70%;
-    background-image: url('/backgrounds/cloud.png');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    opacity: 0.85;
-    pointer-events: none;
-    z-index: 1;
-  }
   .ground {
     position: absolute;
     bottom: 0;
     width: 100%;
     height: 30%;
-    background: #8fb935;
-    border-top: 4px solid #5d821d;
+    /* Tile horizontally, stretch the tile height to fill the ground band */
+    background-image: url('/backgrounds/ground.png');
+    background-repeat: repeat-x;
+    background-size: auto 100%;
+    background-position: left center;
   }
   .decor {
     position: absolute;
@@ -87,7 +88,7 @@
     z-index: 2;
   }
   .decor.cloud {
-    top: 8%;
+    top: var(--top);
     background-image: url('/particles/cloud.png');
   }
   .decor.tree,
