@@ -62,14 +62,14 @@
     position: absolute;
     top: 0;
     width: 100%;
-    height: 70%;
+    height: 29%;
     background: linear-gradient(to bottom, #74b9ff, #b3dcfd);
   }
   .ground {
     position: absolute;
     bottom: 0;
     width: 100%;
-    height: 30%;
+    height: 71%;
     /* Tile horizontally, stretch the tile height to fill the ground band */
     background-image: url('/backgrounds/ground.png');
     background-repeat: repeat-x;
@@ -94,7 +94,7 @@
   .decor.tree,
   .decor.semak,
   .decor.tanaman {
-    bottom: 30%;
+    bottom: 71%;
     background-position: bottom center;
   }
   .decor.tree {
