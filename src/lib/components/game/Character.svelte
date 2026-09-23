@@ -1,9 +1,27 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { charX, selectedCharacter, isMoving, facing } from '$lib/stores/game';
-  import { CHAR_WIDTH, CHAR_HEIGHT } from '$lib/data/houses';
+  import { charX, selectedCharacter, isMoving, facing, activeModal } from '$lib/stores/game';
+  import { houses, CHAR_WIDTH, CHAR_HEIGHT, HOUSE_WIDTH, PROXIMITY_THRESHOLD } from '$lib/data/houses';
+  import { audio } from '$lib/audio/AudioController';
 
   const art = $derived($selectedCharacter === 'bride' ? 'women' : 'men');
+
+  // The house the character is currently standing near (same proximity check as House.svelte).
+  // Clicking/tapping the character while near a bouncing building opens its info.
+  const nearHouse = $derived(
+    houses.find(
+      (h) =>
+        Math.abs($charX + CHAR_WIDTH / 2 - (h.x + (HOUSE_WIDTH * (h.scale ?? 1)) / 2)) <
+        PROXIMITY_THRESHOLD
+    )
+  );
+
+  function openHouse() {
+    if (nearHouse) {
+      audio.play('open');
+      $activeModal = nearHouse.id;
+    }
+  }
 
   // Random blink while idle: front sheet frame 0 (0-2000px) is the normal pose,
   // frame 1 (2000-4000px) is the closed-eyes blink shown briefly every 5-10s.
@@ -48,9 +66,13 @@
   });
 </script>
 
+<!-- svelte-ignore a11y_click_events_have_key_events -->
+<!-- svelte-ignore a11y_no_static_element_interactions -->
 <div
   class="character"
+  class:near={!!nearHouse}
   style="transform: translate3d({$charX}px, 0, 0); --cw: {CHAR_WIDTH}px; --ch: {CHAR_HEIGHT}px;"
+  onclick={openHouse}
 >
   <div
     class="sprite"
@@ -72,6 +94,9 @@
     align-items: flex-end;
     will-change: transform;
     z-index: 10;
+  }
+  .character.near {
+    cursor: pointer;
   }
   .sprite {
     width: var(--cw);
