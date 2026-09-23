@@ -27,7 +27,7 @@ export const MAPS_EMBED = 'https://maps.google.com/maps?q=-6.275942,106.5409344&
 export const CREDITS = [
   { role: 'Concept & Idea', name: 'Vicky', instagram: 'kyulfall' },
   { role: 'Development', name: 'Nafiu', instagram: 'napoydryd' },
-  { role: 'Assets', name: 'Izbik', instagram: 'ridzzi21' }
+  { role: 'Assets', name: 'Izbik', instagram: '_ridzzi21' }
 ];
 
 export const POWERED_BY = 'opencode';
