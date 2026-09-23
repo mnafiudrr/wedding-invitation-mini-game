@@ -33,15 +33,17 @@
   let lastStepTime = 0;
 
   // ---- Responsive scale-to-fit ----
-  // The game is designed on a fixed base canvas (BASE_W x BASE_H) and scaled to fit
-  // the visual viewport. Using window.visualViewport (instead of innerWidth/100vh)
-  // keeps the game identical across phones and in-app browsers (Chrome/Brave/Telegram),
-  // because it reflects the real rendered area including browser zoom and chrome.
+  // The game is designed on a fixed base canvas (BASE_W wide) and scaled to the
+  // visual viewport width, so it always fills the screen left-to-right with no
+  // letterboxing. The base height is derived from the viewport (baseH = vh / scale),
+  // which lets the world stretch vertically while staying horizontally anchored.
+  // Using window.visualViewport (instead of innerWidth/100vh) keeps the game
+  // identical across phones and in-app browsers (Chrome/Brave/Telegram).
   const BASE_W = 400;
-  const BASE_H = 800;
   let vw = $state(BASE_W);
-  let vh = $state(BASE_H);
-  const scale = $derived(Math.min(vw / BASE_W, vh / BASE_H));
+  let vh = $state(800);
+  const scale = $derived(vw / BASE_W);
+  const baseH = $derived(Math.max(600, vh / scale));
 
   function measureViewport() {
     if (typeof window === 'undefined') return;
@@ -123,7 +125,7 @@
 {:else if $gameState === 'playing'}
   <MuteButton />
   <div class="game-container">
-    <div class="game-scale" style="--scale: {scale}">
+    <div class="game-scale" style="--scale: {scale}; --bh: {baseH}px;">
       <World>
         {#each houses as house}
           <House id={house.id} title={house.title} x={house.x} color={house.color} image={house.image} scale={house.scale ?? 1} />
@@ -186,13 +188,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #74b9ff;
   }
 
   .game-scale {
     position: relative;
     width: 400px;
-    height: 800px;
+    height: var(--bh);
     flex: none;
     transform: scale(var(--scale));
   }
