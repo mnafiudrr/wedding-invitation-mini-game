@@ -9,7 +9,13 @@
   {#each CREDITS as credit}
     <div class="credit-section">
       <h4>{credit.role}</h4>
-      <p>{credit.name} · {credit.handle}</p>
+      <p>{credit.name} ·
+        <a
+          href={`https://instagram.com/${credit.instagram}`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >@{credit.instagram}</a>
+      </p>
     </div>
   {/each}
 
@@ -42,5 +48,15 @@
   p {
     margin: 0;
     color: #555;
+  }
+
+  a {
+    color: #b9427a;
+    text-decoration: none;
+    font-weight: bold;
+  }
+
+  a:hover {
+    text-decoration: underline;
   }
 </style>
