@@ -3,7 +3,7 @@
 </script>
 
 <div class="maps-container">
-  <p>We look forward to seeing you at Gedung Serba Guna Perum Serdang Asri.</p>
+  <p>We look forward to seeing you at Gedung Serba Guna Perum Serdang Asri 1.</p>
 
   <div class="iframe-wrapper">
     <iframe

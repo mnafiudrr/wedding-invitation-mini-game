@@ -8,13 +8,13 @@ export const EVENTS = [
     title: 'Akad Nikah',
     date: '10 Oktober 2026',
     time: '08.00 - 09.00',
-    location: 'Gedung Serba Guna Perum Serdang Asri'
+    location: 'Gedung Serba Guna Perum Serdang Asri 1'
   },
   {
     title: 'Resepsi',
     date: '10 Oktober 2026',
     time: '09.00 - 12.00',
-    location: 'Gedung Serba Guna Perum Serdang Asri'
+    location: 'Gedung Serba Guna Perum Serdang Asri 1'
   }
 ];
 
