@@ -6,7 +6,7 @@
   // Horizontal crop anchor: character is centered at ~51.5% of each 2000px frame.
   // zoom=1 shows the whole frame (no crop); zoom>1 crops to the top third/half
   // (head, or chest-to-head) and centers it horizontally.
-  const cx = $derived(zoom <= 1 ? 0 : size / 2 - size * zoom * 0.515);
+  const cx = $derived(zoom <= 1 ? 0 : size / 2 - size * zoom * 0.536) ;
 
   // Random blink: front sheet frame 0 (0-2000px) is the normal pose,
   // frame 1 (2000-4000px) is the closed-eyes blink shown briefly.
