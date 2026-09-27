@@ -66,10 +66,13 @@
     vv?.addEventListener('resize', measureViewport);
     vv?.addEventListener('scroll', measureViewport);
 
-    // Start the background music on the first user gesture anywhere
-    // (autoplay policy requires an interaction before audio can play).
+    // Try to auto-start the background music as soon as the page opens.
+    // Where the browser blocks autoplay (AudioContext created suspended), the
+    // source is scheduled anyway and starts on the first user gesture below.
+    startBgm();
+
     const onFirstGesture = () => {
-      startBgm();
+      audio.init(); // resumes a suspended context → scheduled bgm starts
       window.removeEventListener('pointerdown', onFirstGesture, true);
       window.removeEventListener('keydown', onFirstGesture, true);
     };
@@ -90,7 +93,7 @@
   function startBgm() {
     if (bgmStarted) return;
     bgmStarted = true;
-    audio.init(); // inside a user gesture
+    audio.init(); // inside a user gesture where possible
     audio.preload('bgm', '/audio/akad-payung-teduh.m4a');
     audio.preload('step', '/audio/step.wav');
     audio.preload('open', '/audio/open.wav');
