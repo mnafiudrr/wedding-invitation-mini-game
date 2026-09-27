@@ -3,36 +3,48 @@
   import { WORLD_WIDTH } from '$lib/data/houses';
   let { children } = $props();
 
-  function rand(min: number, max: number) {
+  function rnd(min: number, max: number) {
     return min + Math.random() * (max - min);
   }
 
-  // Fixed ground decorations (particles/*.png, 1000x1000 each).
-  const groundDecor = [
-    { kind: 'tree', x: 80, w: 220 },
-    { kind: 'tree', x: 1500, w: 240 },
-    { kind: 'tree', x: 2720, w: 220 },
-    { kind: 'semak', x: 320, w: 70 },
-    { kind: 'semak', x: 880, w: 75 },
-    { kind: 'semak', x: 1620, w: 70 },
-    { kind: 'semak', x: 2380, w: 80 },
-    { kind: 'tanaman', x: 500, w: 55 },
-    { kind: 'tanaman', x: 1220, w: 55 },
-    { kind: 'tanaman', x: 1960, w: 55 },
-    { kind: 'tanaman', x: 2620, w: 60 }
-  ];
+  const semakImgs = ['semak', 'semak-2', 'semak-3'];
+  const treeImgs = ['tree', 'tree-2', 'tree-3'];
 
-  // Multiple clouds from particles/cloud.png at random positions and sizes.
-  const clouds = Array.from({ length: 9 }, () => ({
-    kind: 'cloud',
-    x: Math.round(rand(20, WORLD_WIDTH - 240)),
-    w: Math.round(rand(90, 210)),
-    top: Math.round(rand(4, 32))
+  // Far-away mountains (gunung.png) rising from the horizon, with a hazy overlay.
+  const gunung = Array.from({ length: 5 }, () => ({
+    x: Math.round(rnd(0, WORLD_WIDTH - 380)),
+    w: Math.round(rnd(220, 380)),
+    haze: 0.3 + Math.random() * 0.3
   }));
 
-  const decor: { kind: string; x: number; w: number; top?: number }[] = [
-    ...clouds,
-    ...groundDecor
+  // Random ground scenery: bushes, trees, plants — random sprite, position and size.
+  const decor: { kind: string; img: string; x: number; w: number; top?: number }[] = [
+    ...Array.from({ length: 10 }, (_, i) => ({
+      kind: 'semak',
+      img: semakImgs[i % semakImgs.length],
+      x: Math.round(rnd(30, WORLD_WIDTH - 130)),
+      w: Math.round(rnd(60, 130))
+    })),
+    ...Array.from({ length: 7 }, (_, i) => ({
+      kind: 'tree',
+      img: treeImgs[i % treeImgs.length],
+      x: Math.round(rnd(30, WORLD_WIDTH - 280)),
+      w: Math.round(rnd(160, 280))
+    })),
+    ...Array.from({ length: 5 }, () => ({
+      kind: 'tanaman',
+      img: 'tanaman',
+      x: Math.round(rnd(30, WORLD_WIDTH - 120)),
+      w: Math.round(rnd(55, 90))
+    })),
+    // clouds float in the sky with random sizes/heights
+    ...Array.from({ length: 9 }, () => ({
+      kind: 'cloud',
+      img: 'cloud',
+      x: Math.round(rnd(20, WORLD_WIDTH - 240)),
+      w: Math.round(rnd(90, 210)),
+      top: Math.round(rnd(4, 32))
+    }))
   ];
 </script>
 
@@ -42,9 +54,21 @@
 >
   <div class="sky"></div>
   <div class="ground"></div>
-  {#each decor as d, i (i)}
-    <div class="decor {d.kind}" style="--x: {d.x}px; --w: {d.w}px; --top: {d.top}%;"></div>
+
+  {#each gunung as m, i (i)}
+    <div class="mountain" style="--x: {m.x}px; --w: {m.w}px; --haze: {m.haze};">
+      <div class="mountain-img"></div>
+      <div class="mountain-haze"></div>
+    </div>
   {/each}
+
+  {#each decor as d, i (i)}
+    <div
+      class="decor {d.kind}"
+      style="--x: {d.x}px; --w: {d.w}px; --top: {d.top ?? 0}%; background-image: url('/particles/{d.img}.png');"
+    ></div>
+  {/each}
+
   {@render children()}
 </div>
 
@@ -76,6 +100,32 @@
     background-size: auto 100%;
     background-position: left center;
   }
+  /* Far-away mountains: desaturated + lightened (haze) so they read as distant */
+  .mountain {
+    position: absolute;
+    bottom: 71%;
+    left: var(--x);
+    width: var(--w);
+    aspect-ratio: 1;
+    z-index: 1;
+  }
+  .mountain-img {
+    position: absolute;
+    inset: 0;
+    background-image: url('/particles/gunung.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: bottom center;
+    image-rendering: pixelated;
+    filter: opacity(0.7) saturate(0.5) brightness(1.12);
+  }
+  .mountain-haze {
+    position: absolute;
+    inset: 0;
+    background: rgba(168, 206, 240, calc(0.35 * var(--haze)));
+    mix-blend-mode: screen;
+    pointer-events: none;
+  }
   .decor {
     position: absolute;
     left: var(--x);
@@ -89,21 +139,11 @@
   }
   .decor.cloud {
     top: var(--top);
-    background-image: url('/particles/cloud.png');
   }
   .decor.tree,
   .decor.semak,
   .decor.tanaman {
     bottom: 30%;
     background-position: bottom center;
-  }
-  .decor.tree {
-    background-image: url('/particles/tree.png');
-  }
-  .decor.semak {
-    background-image: url('/particles/semak.png');
-  }
-  .decor.tanaman {
-    background-image: url('/particles/tanaman.png');
   }
 </style>
