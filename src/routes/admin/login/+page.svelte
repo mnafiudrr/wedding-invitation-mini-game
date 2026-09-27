@@ -42,13 +42,17 @@
 <style>
   .login-card {
     min-height: 100vh;
+    min-height: 100dvh;
     display: flex;
     flex-direction: column;
     justify-content: center;
     gap: 1.5rem;
     max-width: 360px;
+    width: 100%;
     margin: 0 auto;
-    padding: 2rem;
+    padding: 1.5rem;
+    padding-top: calc(1.5rem + env(safe-area-inset-top, 0px));
+    padding-bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px));
   }
 
   h1 {
@@ -69,10 +73,11 @@
   }
 
   input {
-    padding: 0.8rem;
+    padding: 0.9rem;
     border: 2px solid #333;
     border-radius: 8px;
     font-family: inherit;
+    font-size: 1rem;
   }
 
   .submit-btn {
@@ -80,7 +85,8 @@
     background: #bae1ff;
     border: 3px solid #333;
     box-shadow: 0 4px 0 #333;
-    padding: 0.9rem;
+    padding: 1rem;
+    min-height: 52px;
     border-radius: 8px;
     font-weight: bold;
     font-size: 1.1rem;

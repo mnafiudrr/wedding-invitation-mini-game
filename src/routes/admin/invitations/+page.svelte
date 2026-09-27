@@ -139,10 +139,22 @@
   }
 
   input {
-    padding: 0.6rem;
+    padding: 0.7rem;
     border: 2px solid #333;
     border-radius: 8px;
     font-family: inherit;
+    font-size: 1rem;
+  }
+
+  .create-form button[type='submit'] {
+    padding: 0.7rem 1.1rem;
+    min-height: 46px;
+    background: #baffc9;
+    border: 2px solid #333;
+    border-radius: 8px;
+    font-family: inherit;
+    font-weight: bold;
+    cursor: pointer;
   }
 
   .list {
@@ -238,11 +250,14 @@
     border: 2px solid #333;
     box-shadow: 0 2px 0 #333;
     border-radius: 6px;
-    padding: 0.35rem 0.8rem;
+    padding: 0.5rem 0.85rem;
+    min-height: 42px;
     font-family: inherit;
     cursor: pointer;
     text-decoration: none;
     color: #333;
+    display: inline-flex;
+    align-items: center;
   }
 
   .btn.wa {

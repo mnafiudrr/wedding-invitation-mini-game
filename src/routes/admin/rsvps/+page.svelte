@@ -69,9 +69,15 @@
 <style>
   .summary {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    gap: 1rem;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.8rem;
     margin-bottom: 1.2rem;
+  }
+
+  @media (min-width: 640px) {
+    .summary {
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    }
   }
 
   .card {
@@ -93,23 +99,26 @@
 
   .toolbar {
     display: flex;
+    flex-wrap: wrap;
     gap: 0.8rem;
     margin-bottom: 1rem;
   }
 
   input {
-    flex: 1;
-    padding: 0.6rem;
+    flex: 1 1 180px;
+    padding: 0.7rem;
     border: 2px solid #333;
     border-radius: 8px;
     font-family: inherit;
+    font-size: 1rem;
   }
 
   button {
     background: #bae1ff;
     border: 2px solid #333;
     border-radius: 8px;
-    padding: 0.6rem 1rem;
+    padding: 0.7rem 1.1rem;
+    min-height: 44px;
     font-family: inherit;
     font-weight: bold;
     cursor: pointer;
@@ -124,6 +133,7 @@
 
   .table-wrap {
     overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
     border: 3px solid #333;
     border-radius: 10px;
     background: #fff;
@@ -133,6 +143,7 @@
     width: 100%;
     border-collapse: collapse;
     font-size: 0.95rem;
+    min-width: 560px; /* let it scroll horizontally on small screens */
   }
 
   th, td {

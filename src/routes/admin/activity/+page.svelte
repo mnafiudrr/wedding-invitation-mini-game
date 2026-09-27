@@ -58,10 +58,11 @@
 
   input {
     width: 100%;
-    padding: 0.6rem;
+    padding: 0.7rem;
     border: 2px solid #333;
     border-radius: 8px;
     font-family: inherit;
+    font-size: 1rem;
   }
 
   .empty {
@@ -72,6 +73,7 @@
 
   .table-wrap {
     overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
     border: 3px solid #333;
     border-radius: 10px;
     background: #fff;
@@ -81,6 +83,7 @@
     width: 100%;
     border-collapse: collapse;
     font-size: 0.85rem;
+    min-width: 560px; /* let it scroll horizontally on small screens */
   }
 
   th,
