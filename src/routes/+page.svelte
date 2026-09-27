@@ -4,7 +4,7 @@
   import { audio } from '$lib/audio/AudioController';
   import MuteButton from '$lib/components/ui/MuteButton.svelte';
   import LanguageToggle from '$lib/components/ui/LanguageToggle.svelte';
-  import { initLocale } from '$lib/i18n';
+  import { initLocale, dictionaries, locale } from '$lib/i18n';
   import Home from '$lib/components/home/Home.svelte';
   import GameHud from '$lib/components/game/GameHud.svelte';
   import World from '$lib/components/game/World.svelte';
@@ -34,6 +34,8 @@
   let moveDirection = $state<0 | -1 | 1>(0);
   let animationFrameId: number;
   let lastStepTime = 0;
+
+  const T = $derived($locale === 'id' ? dictionaries.id : dictionaries.en);
 
   // ---- Responsive scale-to-fit ----
   // The game is designed on a fixed base canvas (BASE_W wide) and scaled to the
@@ -172,13 +174,13 @@
   </div>
 
   {#if $activeModal}
-    <Modal title={houses.find(h => h.id === $activeModal)?.title || ''}>
+    <Modal title={$activeModal ? T.sections[$activeModal] ?? '' : ''}>
       {#if modalComponents[$activeModal]}
         {@const Component = modalComponents[$activeModal]}
         <Component />
       {:else}
         <div class="placeholder-content">
-          <p>This is the content area for {houses.find(h => h.id === $activeModal)?.title}.</p>
+          <p>This is the content area for {T.sections[$activeModal] ?? ''}.</p>
         </div>
       {/if}
     </Modal>

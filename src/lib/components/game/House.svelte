@@ -2,8 +2,12 @@
   import { charX, activeModal } from '$lib/stores/game';
   import { audio } from '$lib/audio/AudioController';
   import { CHAR_WIDTH, HOUSE_WIDTH, HOUSE_HEIGHT, PROXIMITY_THRESHOLD } from '$lib/data/houses';
+  import { dictionaries, locale } from '$lib/i18n';
 
   let { id, title, x, color, image, scale = 1 } = $props();
+
+  const T = $derived($locale === 'id' ? dictionaries.id : dictionaries.en);
+  const label = $derived(T.sections[id] ?? title);
 
   let isNear = $derived(
     Math.abs($charX + CHAR_WIDTH / 2 - (x + (HOUSE_WIDTH * scale) / 2)) < PROXIMITY_THRESHOLD
@@ -25,7 +29,7 @@
   onclick={openModal}
 >
   <div class="house-label" class:visible={isNear}>
-    {title}
+    {label}
   </div>
   <div
     class="house"
