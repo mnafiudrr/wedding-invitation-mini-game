@@ -11,7 +11,7 @@ if (!url) {
 const statements = [
   `CREATE TABLE IF NOT EXISTS guests (
     id VARCHAR(36) PRIMARY KEY,
-    invite_code VARCHAR(50) NOT NULL UNIQUE,
+    invite_code VARCHAR(50) NOT NULL,
     name VARCHAR(100) NOT NULL,
     is_attending BOOLEAN NOT NULL DEFAULT FALSE,
     headcount INT NOT NULL DEFAULT 1,
