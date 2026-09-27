@@ -154,7 +154,7 @@
             ontouchcancel={stopMove}
             oncontextmenu={(e) => e.preventDefault()}
           >
-            ←
+            <img src="/particles/arrow-left.png" alt="" class="arrow" draggable="false" />
           </button>
           <button
             class="control-btn"
@@ -166,7 +166,7 @@
             ontouchcancel={stopMove}
             oncontextmenu={(e) => e.preventDefault()}
           >
-            →
+            <img src="/particles/arrow-right.png" alt="" class="arrow" draggable="false" />
           </button>
         </div>
       {/if}
@@ -233,8 +233,6 @@
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.9);
     border: 3px solid #333;
-    font-size: 24px;
-    font-weight: bold;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -242,6 +240,13 @@
     -webkit-user-select: none;
     touch-action: none;
     box-shadow: 0 4px 0 #333;
+  }
+
+  .control-btn .arrow {
+    width: 36px;
+    height: 36px;
+    image-rendering: pixelated;
+    pointer-events: none;
   }
   
   .control-btn:active {
