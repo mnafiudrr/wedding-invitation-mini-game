@@ -27,6 +27,10 @@ export const dictionaries = {
     },
     events: {
       countdown: 'Menuju hari bahagia',
+      days: 'Hari',
+      hours: 'Jam',
+      minutes: 'Menit',
+      seconds: 'Detik',
       dates: {
         '10 Oktober 2026': '10 Oktober 2026'
       }
@@ -105,6 +109,10 @@ export const dictionaries = {
     },
     events: {
       countdown: 'Counting down to our special day',
+      days: 'Days',
+      hours: 'Hours',
+      minutes: 'Minutes',
+      seconds: 'Seconds',
       dates: {
         '10 Oktober 2026': '10 October 2026'
       }
@@ -161,7 +169,7 @@ export type Dictionary = {
   sections: Record<string, string>;
   brideGroom: { brideParent: string; groomParent: string; storyTitle: string; storyBody: string };
   quran: { translation: string; reference: string };
-  events: { countdown: string; dates: Record<string, string> };
+  events: { countdown: string; days: string; hours: string; minutes: string; seconds: string; dates: Record<string, string> };
   maps: { intro: string; open: string };
   rsvp: {
     intro: string;
