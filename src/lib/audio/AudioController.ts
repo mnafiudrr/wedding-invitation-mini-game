@@ -2,13 +2,9 @@ import { writable } from 'svelte/store';
 
 type PlayOptions = { loop?: boolean; volume?: number };
 
-// Sound starts muted by default (respects a previously saved unmute choice).
+// Sound always starts muted on every page load (autoplay-safe); the user
+// can unmute with the toggle. The toggle still applies within the session.
 function defaultMuted(): boolean {
-  if (typeof localStorage !== 'undefined') {
-    const saved = localStorage.getItem('wedding_muted');
-    if (saved === 'false') return false;
-    if (saved === 'true') return true;
-  }
   return true;
 }
 
