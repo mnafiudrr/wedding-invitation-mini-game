@@ -14,7 +14,9 @@
 </script>
 
 <div class="hud-left">
-  <IdleSprite art={art} size={48} zoom={2} />
+  <div class="avatar-frame">
+    <IdleSprite art={art} size={48} zoom={2} />
+  </div>
   <div class="hearts">
     {#each [0, 1, 2] as i (i)}
       <img src="/particles/love.png" alt="health" class="heart" draggable="false" />
@@ -36,6 +38,19 @@
     align-items: center;
     gap: 0.6rem;
     pointer-events: none;
+  }
+
+  .avatar-frame {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    border: 3px solid #333;
+    box-shadow: 2px 2px 0 #333;
   }
 
   .hearts {
