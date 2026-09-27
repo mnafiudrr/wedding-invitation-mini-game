@@ -8,6 +8,7 @@
   <nav class="admin-nav">
     <span class="brand">Admin{username ? ` — ${username}` : ''}</span>
     <div class="links">
+      <a href="/admin/invitations">Invitations</a>
       <a href="/admin/rsvps">RSVPs</a>
       <a href="/admin/messages">Messages</a>
       <form method="POST" action="?/logout">

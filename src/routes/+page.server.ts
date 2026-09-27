@@ -3,20 +3,21 @@ import { db } from '$lib/server/db';
 import { guests, messages } from '$lib/server/db/schema';
 import { desc, eq } from 'drizzle-orm';
 
-export const load = async () => {
+export const load = async ({ url }) => {
   try {
     const approvedMessages = await db.select()
       .from(messages)
       .where(eq(messages.isApproved, true))
       .orderBy(desc(messages.createdAt))
       .limit(50);
-      
+
     return {
-      messages: approvedMessages
+      messages: approvedMessages,
+      inviteCode: url.searchParams.get('to') ?? null
     };
   } catch (error) {
     console.error('Failed to load messages:', error);
-    return { messages: [] };
+    return { messages: [], inviteCode: null };
   }
 };
 

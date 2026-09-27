@@ -1,9 +1,16 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
+  import { page } from '$app/stores';
   import type { SubmitFunction } from '@sveltejs/kit';
   import { dictionaries, locale } from '$lib/i18n';
 
   const T = $derived($locale === 'id' ? dictionaries.id : dictionaries.en);
+
+  // Invitation code comes from the ?to= query param; if absent, randomize one.
+  // It is auto-submitted as a hidden field, so the guest never sees/edits it.
+  const inviteCode = $derived(
+    $page.data.inviteCode || 'guest-' + Math.random().toString(36).slice(2, 10)
+  );
 
   let submitting = $state(false);
   let success = $state(false);
@@ -40,10 +47,7 @@
     {/if}
 
     <form method="POST" action="?/rsvp" use:enhance={handleSubmit}>
-      <div class="form-group">
-        <label for="inviteCode">{T.rsvp.inviteCode}</label>
-        <input type="text" id="inviteCode" name="inviteCode" required placeholder={T.rsvp.invitePlaceholder} />
-      </div>
+      <input type="hidden" name="inviteCode" value={inviteCode} />
       
       <div class="form-group">
         <label for="name">{T.rsvp.name}</label>

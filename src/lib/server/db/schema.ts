@@ -31,3 +31,11 @@ export const sessions = mysqlTable('sessions', {
     .references(() => users.id, { onDelete: 'cascade' }),
   expiresAt: timestamp('expires_at').notNull()
 });
+
+export const invitations = mysqlTable('invitations', {
+  id: varchar('id', { length: 36 }).primaryKey(), // crypto.randomUUID()
+  name: varchar('name', { length: 100 }).notNull(),
+  phone: varchar('phone', { length: 20 }).notNull(),
+  code: varchar('code', { length: 100 }).notNull().unique(), // slug from name
+  createdAt: timestamp('created_at').defaultNow().notNull()
+});
