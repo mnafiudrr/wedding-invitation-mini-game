@@ -2,6 +2,16 @@ import { writable } from 'svelte/store';
 
 type PlayOptions = { loop?: boolean; volume?: number };
 
+// Sound starts muted by default (respects a previously saved unmute choice).
+function defaultMuted(): boolean {
+  if (typeof localStorage !== 'undefined') {
+    const saved = localStorage.getItem('wedding_muted');
+    if (saved === 'false') return false;
+    if (saved === 'true') return true;
+  }
+  return true;
+}
+
 class AudioController {
   private ctx: AudioContext | null = null;
   private master: GainNode | null = null;
@@ -9,9 +19,7 @@ class AudioController {
   private loading = new Map<string, Promise<void>>();
   private pending = new Map<string, PlayOptions>();
 
-  readonly muted = writable<boolean>(
-    typeof localStorage !== 'undefined' && localStorage.getItem('wedding_muted') === 'true'
-  );
+  readonly muted = writable<boolean>(defaultMuted());
 
   /** MUST be called from inside a user-gesture handler. Safe to call repeatedly. */
   init() {
@@ -38,9 +46,7 @@ class AudioController {
   }
 
   private get muteTarget(): number {
-    return typeof localStorage !== 'undefined' && localStorage.getItem('wedding_muted') === 'true'
-      ? 0
-      : 1;
+    return defaultMuted() ? 0 : 1;
   }
 
   preload(name: string, url: string): void {
@@ -93,6 +99,8 @@ class AudioController {
     localStorage.setItem('wedding_muted', String(muted));
     this.muted.set(muted);
     if (this.master && this.ctx) {
+      // unmuting is a user gesture — resume a suspended context so bgm starts/continues
+      if (!muted && this.ctx.state === 'suspended') void this.ctx.resume();
       const t = this.ctx.currentTime;
       this.master.gain.cancelScheduledValues(t);
       this.master.gain.linearRampToValueAtTime(muted ? 0 : 1, t + 0.1);
