@@ -30,7 +30,12 @@
 
 <div class="home-scroll">
   <section class="hero">
-    <h1>{T.home.title}</h1>
+    <img
+      class="title-img"
+      src={$locale === 'id' ? '/home/wedding-invitation-id.png' : '/home/wedding-invitation-en.png'}
+      alt={T.home.title}
+      draggable="false"
+    />
 
     <div class="character-selection">
       <button onclick={() => onselect('bride')}>
@@ -78,8 +83,10 @@
     color: #333;
   }
 
-  h1 {
-    font-size: 2rem;
+  .title-img {
+    width: min(70vw, 320px);
+    height: auto;
+    image-rendering: pixelated;
     margin-bottom: 3rem;
   }
 
