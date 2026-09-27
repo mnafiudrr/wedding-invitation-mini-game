@@ -18,7 +18,7 @@
   }));
 
   // Random ground scenery: bushes, trees, plants — random sprite, position and size.
-  const decor: { kind: string; img: string; x: number; w: number; top?: number }[] = [
+  const decor: { kind: string; img: string; x: number; w: number; top?: number; ar?: number }[] = [
     ...Array.from({ length: 10 }, (_, i) => ({
       kind: 'semak',
       img: semakImgs[i % semakImgs.length],
@@ -34,8 +34,9 @@
     ...Array.from({ length: 5 }, () => ({
       kind: 'tanaman',
       img: 'tanaman',
-      x: Math.round(rnd(30, WORLD_WIDTH - 120)),
-      w: Math.round(rnd(55, 90))
+      x: Math.round(rnd(30, WORLD_WIDTH - 190)),
+      w: Math.round(rnd(110, 170)),
+      ar: 3.05 // tanaman.png is a wide 896x294 strip (about 3:1), not square
     })),
     // clouds float in the sky with random sizes/heights
     ...Array.from({ length: 9 }, () => ({
@@ -65,7 +66,7 @@
   {#each decor as d, i (i)}
     <div
       class="decor {d.kind}"
-      style="--x: {d.x}px; --w: {d.w}px; --top: {d.top ?? 0}%; background-image: url('/particles/{d.img}.png');"
+      style="--x: {d.x}px; --w: {d.w}px; --top: {d.top ?? 0}%; --ar: {d.ar ?? 1}; background-image: url('/particles/{d.img}.png');"
     ></div>
   {/each}
 
@@ -130,7 +131,7 @@
     position: absolute;
     left: var(--x);
     width: var(--w);
-    aspect-ratio: 1;
+    aspect-ratio: var(--ar, 1);
     background-repeat: no-repeat;
     background-size: contain;
     image-rendering: pixelated;
