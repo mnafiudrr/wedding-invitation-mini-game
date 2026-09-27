@@ -30,4 +30,4 @@ export const CREDITS = [
   { role: 'Assets', name: 'Izbik', instagram: '_ridzzi21' }
 ];
 
-export const POWERED_BY = 'opencode';
+export const POWERED_BY = 'Kode Mbukak - Nggolet Sg Jero v4 Bledeg';

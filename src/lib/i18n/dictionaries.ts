@@ -64,7 +64,7 @@ export const dictionaries = {
       roles: {
         concept: 'Konsep & Ide',
         development: 'Pengembangan',
-        assets: 'Aset'
+        assets: 'Aset Gambar'
       },
       poweredBy: 'Dibuat dengan'
     },
@@ -142,7 +142,7 @@ export const dictionaries = {
       roles: {
         concept: 'Concept & Ideas',
         development: 'Development',
-        assets: 'Assets'
+        assets: 'Image Assets'
       },
       poweredBy: 'Made with'
     },
