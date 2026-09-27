@@ -1,10 +1,13 @@
 import { writable } from 'svelte/store';
 
+type PlayOptions = { loop?: boolean; volume?: number };
+
 class AudioController {
   private ctx: AudioContext | null = null;
   private master: GainNode | null = null;
   private buffers = new Map<string, AudioBuffer>();
-  private loading = new Set<string>();
+  private loading = new Map<string, Promise<void>>();
+  private pending = new Map<string, PlayOptions>();
 
   readonly muted = writable<boolean>(
     typeof localStorage !== 'undefined' && localStorage.getItem('wedding_muted') === 'true'
@@ -42,18 +45,35 @@ class AudioController {
 
   preload(name: string, url: string): void {
     if (!this.ctx || this.buffers.has(name) || this.loading.has(name)) return;
-    this.loading.add(name);
-    fetch(url)
+    const promise = fetch(url)
       .then((r) => r.arrayBuffer())
       .then((ab) => this.ctx!.decodeAudioData(ab))
-      .then((buf) => this.buffers.set(name, buf))
+      .then((buf) => {
+        this.buffers.set(name, buf);
+        const queued = this.pending.get(name);
+        if (queued) {
+          this.pending.delete(name);
+          this.start(name, queued);
+        }
+      })
       .catch(() => {
-        /* audio is optional; fail silently */
+        this.pending.delete(name); // drop queued plays if the audio fails
       })
       .finally(() => this.loading.delete(name));
+    this.loading.set(name, promise);
   }
 
-  play(name: string, { loop = false, volume = 1 }: { loop?: boolean; volume?: number } = {}): void {
+  play(name: string, options: PlayOptions = {}): void {
+    if (!this.ctx || !this.master) return;
+    if (this.buffers.has(name)) {
+      this.start(name, options);
+    } else {
+      // buffer still decoding — queue and start as soon as it's ready
+      this.pending.set(name, options);
+    }
+  }
+
+  private start(name: string, { loop = false, volume = 1 }: PlayOptions): void {
     if (!this.ctx || !this.master || !this.buffers.has(name)) return;
     try {
       const source = this.ctx.createBufferSource();

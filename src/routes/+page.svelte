@@ -65,20 +65,40 @@
     window.addEventListener('orientationchange', measureViewport);
     vv?.addEventListener('resize', measureViewport);
     vv?.addEventListener('scroll', measureViewport);
+
+    // Start the background music on the first user gesture anywhere
+    // (autoplay policy requires an interaction before audio can play).
+    const onFirstGesture = () => {
+      startBgm();
+      window.removeEventListener('pointerdown', onFirstGesture, true);
+      window.removeEventListener('keydown', onFirstGesture, true);
+    };
+    window.addEventListener('pointerdown', onFirstGesture, true);
+    window.addEventListener('keydown', onFirstGesture, true);
+
     return () => {
       window.removeEventListener('resize', measureViewport);
       window.removeEventListener('orientationchange', measureViewport);
       vv?.removeEventListener('resize', measureViewport);
       vv?.removeEventListener('scroll', measureViewport);
+      window.removeEventListener('pointerdown', onFirstGesture, true);
+      window.removeEventListener('keydown', onFirstGesture, true);
     };
   });
 
-  function selectCharacter(char: 'bride' | 'groom') {
-    audio.init(); // inside this click gesture (autoplay policy)
+  let bgmStarted = false;
+  function startBgm() {
+    if (bgmStarted) return;
+    bgmStarted = true;
+    audio.init(); // inside a user gesture
     audio.preload('bgm', '/audio/akad-payung-teduh.m4a');
     audio.preload('step', '/audio/step.wav');
     audio.preload('open', '/audio/open.wav');
     audio.play('bgm', { loop: true, volume: 0.4 });
+  }
+
+  function selectCharacter(char: 'bride' | 'groom') {
+    startBgm();
     audio.play('select');
     $selectedCharacter = char;
     $gameState = 'playing';
