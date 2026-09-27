@@ -39,12 +39,12 @@
 
     <div class="character-selection">
       <button onclick={() => onselect('bride')}>
-        <IdleSprite art="women" size={96} />
+        <IdleSprite art="women" size={96} blinkMin={3000} blinkMax={7000} />
         <span class="name">{COUPLE.bride.name}</span>
       </button>
       <span class="amp">&</span>
       <button onclick={() => onselect('groom')}>
-        <IdleSprite art="men" size={96} />
+        <IdleSprite art="men" size={96} blinkMin={3000} blinkMax={7000} />
         <span class="name">{COUPLE.groom.name}</span>
       </button>
     </div>
@@ -84,10 +84,21 @@
   }
 
   .title-img {
-    width: min(70vw, 320px);
+    width: min(52vw, 220px);
     height: auto;
     image-rendering: pixelated;
     margin-bottom: 3rem;
+    transform-origin: 50% 20%;
+    animation: swing 5s ease-in-out infinite alternate;
+  }
+
+  @keyframes swing {
+    from {
+      transform: rotate(-2.5deg);
+    }
+    to {
+      transform: rotate(2.5deg);
+    }
   }
 
   .character-selection {
