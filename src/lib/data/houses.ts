@@ -22,5 +22,5 @@ export const houses: HouseData[] = [
   { id: 'maps', title: 'Maps', x: 1520, color: '#baffc9', image: 'map.png' },
   { id: 'rsvp', title: 'RSVP', x: 1920, color: '#bae1ff', image: 'rsvp.png', scale: 0.8 },
   { id: 'messages', title: 'Messages', x: 2320, color: '#e6b3ff', image: 'message.png', scale: 0.5 },
-  { id: 'credits', title: 'Credits', x: 2720, color: '#ffd1dc' }
+  { id: 'credits', title: 'Credits', x: 2720, color: '#ffd1dc', image: 'credit.png', scale: 0.5 }
 ];
