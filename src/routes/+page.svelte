@@ -4,6 +4,7 @@
   import { audio } from '$lib/audio/AudioController';
   import MuteButton from '$lib/components/ui/MuteButton.svelte';
   import Home from '$lib/components/home/Home.svelte';
+  import GameHud from '$lib/components/game/GameHud.svelte';
   import World from '$lib/components/game/World.svelte';
   import Character from '$lib/components/game/Character.svelte';
   import House from '$lib/components/game/House.svelte';
@@ -124,6 +125,7 @@
   <Home onselect={selectCharacter} />
 {:else if $gameState === 'playing'}
   <MuteButton />
+  <GameHud />
   <div class="game-container">
     <div class="game-scale" style="--scale: {scale}; --bh: {baseH}px;">
       <World>
