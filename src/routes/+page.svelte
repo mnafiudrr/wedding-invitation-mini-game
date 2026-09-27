@@ -75,7 +75,7 @@
 
   function selectCharacter(char: 'bride' | 'groom') {
     audio.init(); // inside this click gesture (autoplay policy)
-    audio.preload('bgm', '/audio/bgm.wav');
+    audio.preload('bgm', '/audio/akad-payung-teduh.m4a');
     audio.preload('step', '/audio/step.wav');
     audio.preload('open', '/audio/open.wav');
     audio.play('bgm', { loop: true, volume: 0.4 });

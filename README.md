@@ -116,10 +116,9 @@ All image/sound files live under `static/`. Specs (sizes, frame counts, naming) 
 Drop-in replacements per `docs/graphics-needed.md`. Houses are 68×85 px; background tiles must repeat seamlessly horizontally.
 
 ### Audio (`static/audio/`)
-`select.wav`, `open.wav`, `step.wav`, `bgm.wav` — replace with real recordings keeping the same names (BGM should ideally be compressed mp3/ogg; update the path in `src/routes/+page.svelte` if you change the extension).
-```bash
-node scripts/generate-placeholder-audio.mjs   # regenerate placeholder sounds
-```
+- `akad-payung-teduh.m4a` — background music (AAC/M4A, compressed → small size; loops while in-game)
+- `select.wav`, `open.wav`, `step.wav` — sound effects
+Replace with real recordings keeping the same names (M4A/AAC or MP3/OGG is recommended over WAV for size).
 
 ## Project Docs
 - `docs/plans/` — vision, architecture, milestones

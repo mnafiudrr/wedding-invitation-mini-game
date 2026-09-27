@@ -2,23 +2,23 @@ export const dictionaries = {
   id: {
     home: {
       title: 'Undangan Pernikahan',
-      scroll: 'Gulir untuk menjelajahi'
+      scroll: 'Gulir untuk menjelajah'
     },
     sections: {
-      'bride-groom': 'Pengantin',
+      'bride-groom': 'Mempelai',
       'quran-quotes': 'Kutipan Al-Quran',
-      events: 'Acara',
-      maps: 'Peta',
-      rsvp: 'RSVP',
-      messages: 'Pesan',
-      credits: 'Kredit'
+      events: 'Rangkaian Acara',
+      maps: 'Lokasi',
+      rsvp: 'Konfirmasi Kehadiran',
+      messages: 'Ucapan',
+      credits: 'Tentang Undangan'
     },
     brideGroom: {
       brideParent: 'Putri dari Bapak {0} & Ibu {1}',
       groomParent: 'Putra dari Bapak {0} & Ibu {1}',
       storyTitle: 'Kisah Kami',
       storyBody:
-        'Kami bertemu pada tahun 2020 dan langsung terhubung karena kecintaan kami pada game retro. Setelah 6 tahun yang indah, kami sangat bersemangat untuk melangkah ke jenjang pernikahan!'
+        'Kami bertemu pada tahun 2021 dan dipertemukan oleh kecintaan kami pada game retro. Setelah melewati enam tahun bersama, kami siap memulai perjalanan baru sebagai suami dan istri.'
     },
     quran: {
       translation:
@@ -26,47 +26,47 @@ export const dictionaries = {
       reference: '— QS. Ar-Rum: 21'
     },
     events: {
-      countdown: 'Hitung mundur menuju hari bahagia!',
+      countdown: 'Menuju hari bahagia',
       dates: {
         '10 Oktober 2026': '10 Oktober 2026'
       }
     },
     maps: {
-      intro: 'Kami menantikan kedatangan Anda di Gedung Serba Guna Perum Serdang Asri.',
-      open: 'Buka di Google Maps'
+      intro: 'Kami dengan senang hati menantikan kehadiran Anda di Gedung Serba Guna Perum Serdang Asri.',
+      open: 'Lihat Lokasi di Google Maps'
     },
     rsvp: {
-      intro: 'Mohon konfirmasi kehadiran Anda dengan mengisi formulir di bawah ini.',
+      intro: 'Mohon konfirmasi kehadiran Anda melalui formulir di bawah ini.',
       inviteCode: 'Kode Undangan',
-      invitePlaceholder: 'cth. VIP123',
-      name: 'Nama Anda',
-      namePlaceholder: 'Nama',
-      attend: 'Apakah Anda akan hadir?',
-      yes: 'Ya',
-      no: 'Tidak',
+      invitePlaceholder: 'Contoh: VIP123',
+      name: 'Nama',
+      namePlaceholder: 'Masukkan nama Anda',
+      attend: 'Apakah Anda berkenan hadir?',
+      yes: 'Ya, saya hadir',
+      no: 'Maaf, saya tidak dapat hadir',
       headcount: 'Jumlah Tamu',
-      submit: 'Kirim RSVP',
-      submitting: 'Mengirim...',
+      submit: 'Konfirmasi Kehadiran',
+      submitting: 'Menyimpan...',
       thankYou: 'Terima kasih!',
-      saved: 'RSVP Anda telah disimpan.',
-      errorFallback: 'Terjadi kesalahan.'
+      saved: 'Konfirmasi kehadiran Anda telah tersimpan.',
+      errorFallback: 'Maaf, terjadi kesalahan. Silakan coba kembali.'
     },
     messages: {
-      empty: 'Belum ada pesan. Jadilah yang pertama memberikan ucapan!',
+      empty: 'Belum ada ucapan. Jadilah yang pertama meninggalkan ucapan untuk kami!',
       namePlaceholder: 'Nama Anda',
-      messagePlaceholder: 'Tinggalkan ucapan untuk pengantin...',
-      send: 'Kirim Pesan',
+      messagePlaceholder: 'Tulis ucapan untuk kami...',
+      send: 'Kirim Ucapan',
       sending: 'Mengirim...'
     },
     credits: {
       thankYou: 'Terima Kasih',
-      support: 'Untuk semua yang telah mendukung kami mewujudkan mimpi ini.',
+      support: 'Terima kasih kepada semua yang telah hadir, mendukung, dan menjadi bagian dari perjalanan kami.',
       roles: {
         concept: 'Konsep & Ide',
         development: 'Pengembangan',
         assets: 'Aset'
       },
-      poweredBy: 'Didukung Oleh'
+      poweredBy: 'Dibuat dengan'
     },
     aria: {
       mute: 'Matikan musik dan suara',
@@ -76,26 +76,27 @@ export const dictionaries = {
       toIndonesian: 'Ganti ke Bahasa Indonesia'
     }
   },
+
   en: {
     home: {
       title: 'Wedding Invitation',
       scroll: 'Scroll to explore'
     },
     sections: {
-      'bride-groom': 'Bride & Groom',
+      'bride-groom': 'The Couple',
       'quran-quotes': 'Quran Quotes',
-      events: 'Events',
-      maps: 'Maps',
+      events: 'The Celebration',
+      maps: 'Location',
       rsvp: 'RSVP',
-      messages: 'Messages',
-      credits: 'Credits'
+      messages: 'Wishes',
+      credits: 'About This Invitation'
     },
     brideGroom: {
       brideParent: 'Daughter of Mr. {0} & Mrs. {1}',
       groomParent: 'Son of Mr. {0} & Mrs. {1}',
       storyTitle: 'Our Story',
       storyBody:
-        'We met in 2020 and instantly connected over our love for retro games. After 6 wonderful years, we are so excited to tie the knot!'
+        'We met in 2021 and bonded over our shared love for retro games. After six wonderful years together, we are ready to begin a new chapter as husband and wife.'
     },
     quran: {
       translation:
@@ -103,54 +104,54 @@ export const dictionaries = {
       reference: '— Surah Ar-Rum, 21'
     },
     events: {
-      countdown: 'Countdown to the big day!',
+      countdown: 'Counting down to our special day',
       dates: {
         '10 Oktober 2026': '10 October 2026'
       }
     },
     maps: {
-      intro: 'We look forward to seeing you at Gedung Serba Guna Perum Serdang Asri.',
-      open: 'Open in Google Maps'
+      intro: 'We would be delighted to have you join us at Gedung Serba Guna Perum Serdang Asri.',
+      open: 'View on Google Maps'
     },
     rsvp: {
-      intro: 'Please confirm your attendance by filling out the form below.',
+      intro: 'Please let us know if you will be joining us by filling out the form below.',
       inviteCode: 'Invitation Code',
       invitePlaceholder: 'e.g. VIP123',
-      name: 'Your Name',
-      namePlaceholder: 'John Doe',
-      attend: 'Will you attend?',
-      yes: 'Yes',
-      no: 'No',
+      name: 'Name',
+      namePlaceholder: 'Enter your name',
+      attend: 'Will you be joining us?',
+      yes: 'Yes, I’ll be there',
+      no: 'Sorry, I won’t be able to attend',
       headcount: 'Number of Guests',
-      submit: 'Submit RSVP',
-      submitting: 'Submitting...',
+      submit: 'Confirm Attendance',
+      submitting: 'Saving...',
       thankYou: 'Thank you!',
-      saved: 'Your RSVP has been saved.',
-      errorFallback: 'Something went wrong.'
+      saved: 'Your attendance has been confirmed.',
+      errorFallback: 'Sorry, something went wrong. Please try again.'
     },
     messages: {
-      empty: 'No messages yet. Be the first to leave a wish!',
+      empty: 'No wishes yet. Be the first to leave a message for us!',
       namePlaceholder: 'Your Name',
-      messagePlaceholder: 'Leave a wish for the bride and groom...',
-      send: 'Send Message',
+      messagePlaceholder: 'Write a wish for us...',
+      send: 'Send Wish',
       sending: 'Sending...'
     },
     credits: {
       thankYou: 'Thank You',
-      support: 'To everyone who supported us in making this dream a reality.',
+      support: 'Thank you to everyone who has been there for us and shared in this journey.',
       roles: {
-        concept: 'Concept & Idea',
+        concept: 'Concept & Ideas',
         development: 'Development',
         assets: 'Assets'
       },
-      poweredBy: 'Powered By'
+      poweredBy: 'Made with'
     },
     aria: {
       mute: 'Mute music and sounds',
-      unmute: 'Unmute music and sounds',
-      home: 'Back to home page',
+      unmute: 'Turn on music and sounds',
+      home: 'Back to home',
       toEnglish: 'Switch to English',
-      toIndonesian: 'Switch to Bahasa Indonesia'
+      toIndonesian: 'Switch to Indonesian'
     }
   }
 } as const;
@@ -178,14 +179,26 @@ export type Dictionary = {
     saved: string;
     errorFallback: string;
   };
-  messages: { empty: string; namePlaceholder: string; messagePlaceholder: string; send: string; sending: string };
+  messages: {
+    empty: string;
+    namePlaceholder: string;
+    messagePlaceholder: string;
+    send: string;
+    sending: string;
+  };
   credits: {
     thankYou: string;
     support: string;
     roles: Record<string, string>;
     poweredBy: string;
   };
-  aria: { mute: string; unmute: string; home: string; toEnglish: string; toIndonesian: string };
+  aria: {
+    mute: string;
+    unmute: string;
+    home: string;
+    toEnglish: string;
+    toIndonesian: string;
+  };
 };
 
 export const dicts: Record<'id' | 'en', Dictionary> = dictionaries;
