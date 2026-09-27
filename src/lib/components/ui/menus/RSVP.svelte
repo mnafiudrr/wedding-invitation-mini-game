@@ -1,6 +1,9 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
   import type { SubmitFunction } from '@sveltejs/kit';
+  import { dictionaries, locale } from '$lib/i18n';
+
+  const T = $derived($locale === 'id' ? dictionaries.id : dictionaries.en);
 
   let submitting = $state(false);
   let success = $state(false);
@@ -16,7 +19,7 @@
       } else if (result.type === 'failure' && result.data?.error) {
         errorMsg = String(result.data.error);
       } else {
-        errorMsg = 'Something went wrong.';
+        errorMsg = T.rsvp.errorFallback;
       }
       update({ reset: false });
     };
@@ -26,11 +29,11 @@
 <div class="rsvp-container">
   {#if success}
     <div class="success-message">
-      <h3>Thank you!</h3>
-      <p>Your RSVP has been saved.</p>
+      <h3>{T.rsvp.thankYou}</h3>
+      <p>{T.rsvp.saved}</p>
     </div>
   {:else}
-    <p>Please confirm your attendance by filling out the form below.</p>
+    <p>{T.rsvp.intro}</p>
     
     {#if errorMsg}
       <div class="error">{errorMsg}</div>
@@ -38,30 +41,30 @@
 
     <form method="POST" action="?/rsvp" use:enhance={handleSubmit}>
       <div class="form-group">
-        <label for="inviteCode">Invitation Code</label>
-        <input type="text" id="inviteCode" name="inviteCode" required placeholder="e.g. VIP123" />
+        <label for="inviteCode">{T.rsvp.inviteCode}</label>
+        <input type="text" id="inviteCode" name="inviteCode" required placeholder={T.rsvp.invitePlaceholder} />
       </div>
       
       <div class="form-group">
-        <label for="name">Your Name</label>
-        <input type="text" id="name" name="name" required placeholder="John Doe" />
+        <label for="name">{T.rsvp.name}</label>
+        <input type="text" id="name" name="name" required placeholder={T.rsvp.namePlaceholder} />
       </div>
       
       <fieldset class="form-group borderless">
-        <legend>Will you attend?</legend>
+        <legend>{T.rsvp.attend}</legend>
         <div class="radio-group">
-          <label><input type="radio" name="isAttending" value="true" checked /> Yes</label>
-          <label><input type="radio" name="isAttending" value="false" /> No</label>
+          <label><input type="radio" name="isAttending" value="true" checked /> {T.rsvp.yes}</label>
+          <label><input type="radio" name="isAttending" value="false" /> {T.rsvp.no}</label>
         </div>
       </fieldset>
       
       <div class="form-group">
-        <label for="headcount">Number of Guests</label>
+        <label for="headcount">{T.rsvp.headcount}</label>
         <input type="number" id="headcount" name="headcount" min="1" max="5" value="1" required />
       </div>
       
       <button type="submit" class="submit-btn" disabled={submitting}>
-        {submitting ? 'Submitting...' : 'Submit RSVP'}
+        {submitting ? T.rsvp.submitting : T.rsvp.submit}
       </button>
     </form>
   {/if}

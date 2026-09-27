@@ -3,6 +3,7 @@
   import HomeSection from './HomeSection.svelte';
   import { COUPLE } from '$lib/data/couple';
   import { houses } from '$lib/data/houses';
+  import { dictionaries, locale } from '$lib/i18n';
 
   import BrideGroom from '$lib/components/ui/menus/BrideGroom.svelte';
   import QuranQuotes from '$lib/components/ui/menus/QuranQuotes.svelte';
@@ -13,6 +14,8 @@
   import Credits from '$lib/components/ui/menus/Credits.svelte';
 
   let { onselect }: { onselect: (char: 'bride' | 'groom') => void } = $props();
+
+  const T = $derived($locale === 'id' ? dictionaries.id : dictionaries.en);
 
   const sections = [
     { component: BrideGroom, motif: 'heart' },
@@ -27,7 +30,7 @@
 
 <div class="home-scroll">
   <section class="hero">
-    <h1>Wedding Invitation</h1>
+    <h1>{T.home.title}</h1>
 
     <div class="character-selection">
       <button onclick={() => onselect('bride')}>
@@ -41,12 +44,12 @@
       </button>
     </div>
 
-    <div class="scroll-hint">Scroll to explore</div>
+    <div class="scroll-hint">{T.home.scroll}</div>
   </section>
 
   {#each sections as section, i (i)}
     {@const Component = section.component}
-    <HomeSection title={houses[i].title} accent={houses[i].color} motif={section.motif}>
+    <HomeSection title={T.sections[houses[i].id]} accent={houses[i].color} motif={section.motif}>
       <Component />
     </HomeSection>
   {/each}

@@ -3,6 +3,8 @@
   import { gameState, selectedCharacter, cameraX, charX, activeModal, isMoving, facing } from '$lib/stores/game';
   import { audio } from '$lib/audio/AudioController';
   import MuteButton from '$lib/components/ui/MuteButton.svelte';
+  import LanguageToggle from '$lib/components/ui/LanguageToggle.svelte';
+  import { initLocale } from '$lib/i18n';
   import Home from '$lib/components/home/Home.svelte';
   import GameHud from '$lib/components/game/GameHud.svelte';
   import World from '$lib/components/game/World.svelte';
@@ -54,6 +56,7 @@
   }
 
   onMount(() => {
+    initLocale();
     measureViewport();
     const vv = window.visualViewport;
     window.addEventListener('resize', measureViewport);
@@ -122,9 +125,11 @@
 
 {#if $gameState === 'title'}
   <MuteButton />
+  <LanguageToggle />
   <Home onselect={selectCharacter} />
 {:else if $gameState === 'playing'}
   <MuteButton />
+  <LanguageToggle />
   <GameHud />
   <div class="game-container">
     <div class="game-scale" style="--scale: {scale}; --bh: {baseH}px;">

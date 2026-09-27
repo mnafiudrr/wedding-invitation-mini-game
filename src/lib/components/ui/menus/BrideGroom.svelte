@@ -1,6 +1,14 @@
 <script lang="ts">
   import { COUPLE } from '$lib/data/couple';
   import IdleSprite from '$lib/components/ui/IdleSprite.svelte';
+  import { dictionaries, locale } from '$lib/i18n';
+
+  const T = $derived($locale === 'id' ? dictionaries.id : dictionaries.en);
+
+  function parents(parent: string) {
+    const [a, b] = parent.split(' & ');
+    return { a, b };
+  }
 </script>
 
 <div class="menu-content">
@@ -9,7 +17,7 @@
       <IdleSprite art="women" size={100} zoom={2} />
     </div>
     <h3>{COUPLE.bride.name}</h3>
-    <p>Putri dari Bapak {COUPLE.bride.parent.split(' & ')[0]} & Ibu {COUPLE.bride.parent.split(' & ')[1]}</p>
+    <p>{T.brideGroom.brideParent.replace('{0}', parents(COUPLE.bride.parent).a).replace('{1}', parents(COUPLE.bride.parent).b)}</p>
   </div>
 
   <div class="ampersand">&</div>
@@ -19,12 +27,12 @@
       <IdleSprite art="men" size={100} zoom={2} />
     </div>
     <h3>{COUPLE.groom.name}</h3>
-    <p>Putra dari Bapak {COUPLE.groom.parent.split(' & ')[0]} & Ibu {COUPLE.groom.parent.split(' & ')[1]}</p>
+    <p>{T.brideGroom.groomParent.replace('{0}', parents(COUPLE.groom.parent).a).replace('{1}', parents(COUPLE.groom.parent).b)}</p>
   </div>
 
   <div class="story">
-    <h4>Our Story</h4>
-    <p>We met in 2020 and instantly connected over our love for retro games. After 6 wonderful years, we are so excited to tie the knot!</p>
+    <h4>{T.brideGroom.storyTitle}</h4>
+    <p>{T.brideGroom.storyBody}</p>
   </div>
 </div>
 

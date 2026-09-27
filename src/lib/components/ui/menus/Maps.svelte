@@ -1,9 +1,12 @@
 <script lang="ts">
   import { MAPS_URL, MAPS_EMBED } from '$lib/data/couple';
+  import { dictionaries, locale } from '$lib/i18n';
+
+  const T = $derived($locale === 'id' ? dictionaries.id : dictionaries.en);
 </script>
 
 <div class="maps-container">
-  <p>We look forward to seeing you at Gedung Serba Guna Perum Serdang Asri 1.</p>
+  <p>{T.maps.intro}</p>
 
   <div class="iframe-wrapper">
     <iframe
@@ -19,7 +22,7 @@
   </div>
 
   <a href={MAPS_URL} target="_blank" rel="noopener noreferrer" class="btn">
-    Open in Google Maps
+    {T.maps.open}
   </a>
 </div>
 

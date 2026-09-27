@@ -2,6 +2,9 @@
   import { enhance } from '$app/forms';
   import { page } from '$app/stores';
   import type { SubmitFunction } from '@sveltejs/kit';
+  import { dictionaries, locale } from '$lib/i18n';
+
+  const T = $derived($locale === 'id' ? dictionaries.id : dictionaries.en);
 
   let submitting = $state(false);
   
@@ -20,7 +23,7 @@
 <div class="messages-container">
   <div class="message-list">
     {#if messages.length === 0}
-      <p class="empty">No messages yet. Be the first to leave a wish!</p>
+      <p class="empty">{T.messages.empty}</p>
     {:else}
       {#each messages as msg}
         <div class="message-card">
@@ -33,10 +36,10 @@
 
   <div class="message-form-container">
     <form method="POST" action="?/message" use:enhance={handleSubmit}>
-      <input type="text" name="guestName" placeholder="Your Name" required />
-      <textarea name="message" placeholder="Leave a wish for the bride and groom..." required rows="3"></textarea>
+      <input type="text" name="guestName" placeholder={T.messages.namePlaceholder} required />
+      <textarea name="message" placeholder={T.messages.messagePlaceholder} required rows="3"></textarea>
       <button type="submit" disabled={submitting}>
-        {submitting ? 'Sending...' : 'Send Message'}
+        {submitting ? T.messages.sending : T.messages.send}
       </button>
     </form>
   </div>

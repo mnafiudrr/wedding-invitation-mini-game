@@ -1,14 +1,23 @@
 <script lang="ts">
   import { CREDITS, POWERED_BY } from '$lib/data/couple';
+  import { dictionaries, locale } from '$lib/i18n';
+
+  const T = $derived($locale === 'id' ? dictionaries.id : dictionaries.en);
+
+  const roleKeys: Record<string, 'concept' | 'development' | 'assets'> = {
+    'Concept & Idea': 'concept',
+    Development: 'development',
+    Assets: 'assets'
+  };
 </script>
 
 <div class="credits-container">
-  <h3>Thank You</h3>
-  <p>To everyone who supported us in making this dream a reality.</p>
+  <h3>{T.credits.thankYou}</h3>
+  <p>{T.credits.support}</p>
 
   {#each CREDITS as credit}
     <div class="credit-section">
-      <h4>{credit.role}</h4>
+      <h4>{T.credits.roles[roleKeys[credit.role]]}</h4>
       <p>{credit.name} ·
         <a
           href={`https://instagram.com/${credit.instagram}`}
@@ -20,7 +29,7 @@
   {/each}
 
   <div class="credit-section">
-    <h4>Powered By</h4>
+    <h4>{T.credits.poweredBy}</h4>
     <p>{POWERED_BY}</p>
   </div>
 </div>

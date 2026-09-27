@@ -1,8 +1,11 @@
 <script lang="ts">
   import { gameState, selectedCharacter, activeModal, cameraX, charX, isMoving } from '$lib/stores/game';
   import IdleSprite from '$lib/components/ui/IdleSprite.svelte';
+  import HomeIcon from '$lib/components/ui/icons/HomeIcon.svelte';
+  import { dictionaries, locale } from '$lib/i18n';
 
   const art = $derived($selectedCharacter === 'bride' ? 'women' : 'men');
+  const aria = $derived($locale === 'id' ? dictionaries.id.aria.home : dictionaries.en.aria.home);
 
   function goHome() {
     isMoving.set(false);
@@ -24,8 +27,8 @@
   </div>
 </div>
 
-<button class="home-btn" onclick={goHome} aria-label="Back to home page">
-  🏠
+<button class="home-btn" onclick={goHome} aria-label={aria}>
+  <HomeIcon size={24} />
 </button>
 
 <style>
@@ -68,7 +71,7 @@
   .home-btn {
     position: fixed;
     top: 0.8rem;
-    right: 3.6rem; /* sits beside the mute button (at 0.8rem) */
+    right: 6.4rem; /* sits beside the language toggle (3.6rem) and mute (0.8rem) */
     z-index: 90;
     width: 44px;
     height: 44px;

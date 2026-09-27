@@ -1,20 +1,28 @@
 <script lang="ts">
   import { EVENTS } from '$lib/data/couple';
+  import { dictionaries, locale } from '$lib/i18n';
+
+  const T = $derived($locale === 'id' ? dictionaries.id : dictionaries.en);
+
+  const eventTitles: Record<string, string> = {
+    'Akad Nikah': $locale === 'id' ? 'Akad Nikah' : 'Akad Nikah',
+    'Resepsi': $locale === 'id' ? 'Resepsi' : 'Wedding Reception'
+  };
 </script>
 
 <div class="events-container">
   {#each EVENTS as event}
     <div class="event-card">
-      <h3>{event.title}</h3>
-      <p class="date">{event.date}</p>
+      <h3>{eventTitles[event.title] ?? event.title}</h3>
+      <p class="date">{T.events.dates[event.date] ?? event.date}</p>
       <p class="time">{event.time}</p>
       <p class="location">{event.location}</p>
     </div>
   {/each}
 
   <div class="countdown">
-    <h4>Countdown to the big day!</h4>
-    <p>10 Oktober 2026</p>
+    <h4>{T.events.countdown}</h4>
+    <p>{T.events.dates['10 Oktober 2026']}</p>
   </div>
 </div>
 

@@ -1,20 +1,22 @@
 <script lang="ts">
   import { audio } from '$lib/audio/AudioController';
+  import { dictionaries, locale } from '$lib/i18n';
+  import SpeakerIcon from './icons/SpeakerIcon.svelte';
 
   const muted = audio.muted;
+  const aria = $derived(
+    $muted
+      ? ($locale === 'id' ? dictionaries.id.aria.unmute : dictionaries.en.aria.unmute)
+      : ($locale === 'id' ? dictionaries.id.aria.mute : dictionaries.en.aria.mute)
+  );
 
   function toggle() {
     audio.setMuted(!$muted);
   }
 </script>
 
-<button
-  class="mute-btn"
-  aria-label={$muted ? 'Unmute music and sounds' : 'Mute music and sounds'}
-  aria-pressed={$muted}
-  onclick={toggle}
->
-  {$muted ? '🔇' : '🔊'}
+<button class="mute-btn" aria-label={aria} aria-pressed={$muted} onclick={toggle}>
+  <SpeakerIcon muted={$muted} size={24} />
 </button>
 
 <style>
@@ -29,7 +31,6 @@
     background: rgba(255, 255, 255, 0.9);
     border: 2px solid #333;
     box-shadow: 0 3px 0 #333;
-    font-size: 18px;
     cursor: pointer;
     display: flex;
     align-items: center;
