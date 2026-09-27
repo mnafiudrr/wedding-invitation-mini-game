@@ -7,6 +7,11 @@
 
   let submitting = $state(false);
   let errorMsg = $state('');
+  let expanded = $state<string[]>([]);
+
+  function toggleAccesses(id: string) {
+    expanded = expanded.includes(id) ? expanded.filter((x) => x !== id) : [...expanded, id];
+  }
 
   // Simplified mustache template: {{name}} and {{link}} are replaced per invitation.
   const WA_TEMPLATE =
@@ -72,6 +77,23 @@
         </div>
         <p class="phone">{row.phone}</p>
         <p class="link">{data.baseUrl}/?to={row.code}</p>
+        <button class="accessed" onclick={() => toggleAccesses(row.id)}>
+          Accessed: {row.accessed}
+        </button>
+        {#if expanded.includes(row.id)}
+          <div class="access-list">
+            {#if row.accesses.length === 0}
+              <p class="none">No access recorded.</p>
+            {:else}
+              {#each row.accesses as a (a.at + a.browserKey)}
+                <div class="access-row">
+                  <span>{new Date(a.at).toLocaleString()}</span>
+                  <code class="bkey">{a.browserKey}</code>
+                </div>
+              {/each}
+            {/if}
+          </div>
+        {/if}
         <div class="actions">
           <a
             href={whatsappUrl(row.phone, row.name, row.code)}
@@ -164,6 +186,51 @@
     gap: 0.6rem;
     flex-wrap: wrap;
     margin-top: 0.6rem;
+  }
+
+  .accessed {
+    margin-top: 0.5rem;
+    background: #fffbe8;
+    border: 2px solid #333;
+    border-radius: 6px;
+    padding: 0.25rem 0.7rem;
+    font-family: inherit;
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  .access-list {
+    margin-top: 0.5rem;
+    border-top: 2px dashed #ddd;
+    padding-top: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    max-height: 180px;
+    overflow-y: auto;
+  }
+
+  .access-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+  }
+
+  .bkey {
+    font-size: 0.7rem;
+    background: #f0f0f7;
+    border-radius: 4px;
+    padding: 0.1rem 0.4rem;
+    color: #555;
+    word-break: break-all;
+    max-width: 55%;
+  }
+
+  .none {
+    color: #888;
+    font-style: italic;
   }
 
   .btn {

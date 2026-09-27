@@ -1,6 +1,6 @@
 import { fail } from '@sveltejs/kit';
 import { db } from '$lib/server/db';
-import { guests, messages } from '$lib/server/db/schema';
+import { guests, messages, activityLogs } from '$lib/server/db/schema';
 import { desc, eq } from 'drizzle-orm';
 
 export const load = async ({ url }) => {
@@ -69,5 +69,20 @@ export const actions = {
       console.error(err);
       return fail(500, { error: 'Failed to send message.' });
     }
+  },
+
+  log: async ({ request }) => {
+    const data = await request.formData();
+    const browserKey = (data.get('browserKey') as string | null)?.slice(0, 64) ?? '';
+    const code = (data.get('code') as string | null)?.slice(0, 100) || null;
+
+    if (!browserKey) return fail(400, { error: 'Missing browser key.' });
+
+    await db.insert(activityLogs).values({
+      id: crypto.randomUUID(),
+      browserKey,
+      code
+    });
+    return { success: true };
   }
 };

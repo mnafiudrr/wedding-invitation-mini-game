@@ -39,3 +39,10 @@ export const invitations = mysqlTable('invitations', {
   code: varchar('code', { length: 100 }).notNull().unique(), // slug from name
   createdAt: timestamp('created_at').defaultNow().notNull()
 });
+
+export const activityLogs = mysqlTable('activity_logs', {
+  id: varchar('id', { length: 36 }).primaryKey(), // crypto.randomUUID()
+  browserKey: varchar('browser_key', { length: 64 }).notNull(),
+  code: varchar('code', { length: 100 }), // ?to= value (null when absent)
+  createdAt: timestamp('created_at').defaultNow().notNull()
+});

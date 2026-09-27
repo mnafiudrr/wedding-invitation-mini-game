@@ -42,6 +42,12 @@ const statements = [
     phone VARCHAR(20) NOT NULL,
     code VARCHAR(100) NOT NULL UNIQUE,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+  )`,
+  `CREATE TABLE IF NOT EXISTS activity_logs (
+    id VARCHAR(36) PRIMARY KEY,
+    browser_key VARCHAR(64) NOT NULL,
+    code VARCHAR(100),
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
   )`
 ];
 

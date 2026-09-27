@@ -66,6 +66,9 @@
     vv?.addEventListener('resize', measureViewport);
     vv?.addEventListener('scroll', measureViewport);
 
+    // Log page access (with a per-browser key) so admins can trace activity.
+    logActivity();
+
     // Try to auto-start the background music as soon as the page opens.
     // Where the browser blocks autoplay (AudioContext created suspended), the
     // source is scheduled anyway and starts on the first user gesture below.
@@ -98,6 +101,29 @@
     audio.preload('step', '/audio/step.wav');
     audio.preload('open', '/audio/open.wav');
     audio.play('bgm', { loop: true, volume: 0.4 });
+  }
+
+  // Stable random key per browser (localStorage) to correlate access activity.
+  function getBrowserKey(): string {
+    const KEY = 'wedding_browser_key';
+    const existing = localStorage.getItem(KEY);
+    if (existing) return existing;
+    const key = crypto.randomUUID();
+    localStorage.setItem(KEY, key);
+    return key;
+  }
+
+  function logActivity() {
+    try {
+      const code = new URLSearchParams(window.location.search).get('to') ?? '';
+      void fetch('/?/log', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({ browserKey: getBrowserKey(), code }).toString()
+      });
+    } catch {
+      /* non-critical */
+    }
   }
 
   function selectCharacter(char: 'bride' | 'groom') {

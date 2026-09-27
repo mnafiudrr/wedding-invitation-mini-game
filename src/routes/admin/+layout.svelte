@@ -11,6 +11,7 @@
       <a href="/admin/invitations">Invitations</a>
       <a href="/admin/rsvps">RSVPs</a>
       <a href="/admin/messages">Messages</a>
+      <a href="/admin/activity">Activity</a>
       <form method="POST" action="?/logout">
         <button type="submit" class="logout-btn">Logout</button>
       </form>

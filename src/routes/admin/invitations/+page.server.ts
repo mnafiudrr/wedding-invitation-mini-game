@@ -1,6 +1,6 @@
 import { fail, redirect } from '@sveltejs/kit';
 import { db } from '$lib/server/db';
-import { invitations } from '$lib/server/db/schema';
+import { invitations, activityLogs } from '$lib/server/db/schema';
 import { desc, eq } from 'drizzle-orm';
 import type { Actions, PageServerLoad } from './$types';
 
@@ -17,15 +17,25 @@ function slugify(name: string): string {
 export const load: PageServerLoad = async ({ locals, url }) => {
   if (!locals.user) redirect(302, '/admin/login');
   const rows = await db.select().from(invitations).orderBy(desc(invitations.createdAt));
+  const logs = await db.select().from(activityLogs).orderBy(desc(activityLogs.createdAt));
+
   return {
     baseUrl: url.origin,
-    rows: rows.map((r) => ({
-      id: r.id,
-      name: r.name,
-      phone: r.phone,
-      code: r.code,
-      createdAt: r.createdAt.toISOString()
-    }))
+    rows: rows.map((r) => {
+      const accesses = logs.filter((l) => l.code === r.code);
+      return {
+        id: r.id,
+        name: r.name,
+        phone: r.phone,
+        code: r.code,
+        createdAt: r.createdAt.toISOString(),
+        accessed: accesses.length,
+        accesses: accesses.map((a) => ({
+          at: a.createdAt.toISOString(),
+          browserKey: a.browserKey
+        }))
+      };
+    })
   };
 };
 
