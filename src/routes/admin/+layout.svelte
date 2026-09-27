@@ -23,6 +23,15 @@
 </div>
 
 <style>
+  /* The game's global app.css sets overflow:hidden + touch-action:none on body;
+     admin pages need normal page scrolling restored. */
+  :global(html),
+  :global(body) {
+    overflow: auto;
+    overflow-y: scroll;
+    touch-action: auto;
+  }
+
   .admin-shell {
     min-height: 100vh;
     background: #f7f7fb;
