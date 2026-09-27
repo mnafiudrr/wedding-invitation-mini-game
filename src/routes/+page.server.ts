@@ -21,15 +21,30 @@ export const load = async ({ url }) => {
   }
 };
 
+const MAX_MSG_PER_MINUTE = 3;
+const messageAttempts = new Map<string, number[]>();
+
+// In-memory per-browser rate limit for the message form; resets on server restart.
+function isRateLimited(key: string): boolean {
+  const now = Date.now();
+  const windowMs = 60_000;
+  const times = (messageAttempts.get(key) ?? []).filter((t) => now - t < windowMs);
+  messageAttempts.set(key, times);
+  if (times.length >= MAX_MSG_PER_MINUTE) return true;
+  times.push(now);
+  messageAttempts.set(key, times);
+  return false;
+}
+
 export const actions = {
   rsvp: async ({ request }) => {
     const data = await request.formData();
-    const inviteCode = data.get('inviteCode') as string;
-    const name = data.get('name') as string;
+    const inviteCode = (data.get('inviteCode') as string | null)?.trim().slice(0, 50) ?? '';
+    const name = (data.get('name') as string | null)?.trim().slice(0, 100) ?? '';
     const isAttending = data.get('isAttending') === 'true';
-    const headcount = parseInt(data.get('headcount') as string, 10);
+    const headcount = Math.min(10, Math.max(1, parseInt(data.get('headcount') as string, 10) || 1));
 
-    if (!inviteCode || !name || isNaN(headcount)) {
+    if (!inviteCode || !name) {
       return fail(400, { error: 'Missing required fields.' });
     }
 
@@ -50,11 +65,16 @@ export const actions = {
 
   message: async ({ request }) => {
     const data = await request.formData();
-    const guestName = data.get('guestName') as string;
-    const message = data.get('message') as string;
+    const guestName = (data.get('guestName') as string | null)?.trim().slice(0, 100) ?? '';
+    const message = (data.get('message') as string | null)?.trim().slice(0, 500) ?? '';
+    const browserKey = (data.get('browserKey') as string | null)?.slice(0, 64) || 'anon';
 
     if (!guestName || !message) {
       return fail(400, { error: 'Missing required fields.' });
+    }
+
+    if (isRateLimited(browserKey)) {
+      return fail(429, { error: 'Too many messages. Please try again in a minute.' });
     }
 
     try {

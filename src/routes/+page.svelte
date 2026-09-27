@@ -5,6 +5,7 @@
   import MuteButton from '$lib/components/ui/MuteButton.svelte';
   import LanguageToggle from '$lib/components/ui/LanguageToggle.svelte';
   import { initLocale, dictionaries, locale } from '$lib/i18n';
+  import { getBrowserKey } from '$lib/utils/browserKey';
   import Home from '$lib/components/home/Home.svelte';
   import GameHud from '$lib/components/game/GameHud.svelte';
   import World from '$lib/components/game/World.svelte';
@@ -104,15 +105,6 @@
   }
 
   // Stable random key per browser (localStorage) to correlate access activity.
-  function getBrowserKey(): string {
-    const KEY = 'wedding_browser_key';
-    const existing = localStorage.getItem(KEY);
-    if (existing) return existing;
-    const key = crypto.randomUUID();
-    localStorage.setItem(KEY, key);
-    return key;
-  }
-
   function logActivity() {
     try {
       const code = new URLSearchParams(window.location.search).get('to') ?? '';

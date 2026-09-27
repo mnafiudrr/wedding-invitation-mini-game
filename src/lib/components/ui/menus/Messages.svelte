@@ -3,6 +3,7 @@
   import { page } from '$app/stores';
   import type { SubmitFunction } from '@sveltejs/kit';
   import { dictionaries, locale } from '$lib/i18n';
+  import { getBrowserKey } from '$lib/utils/browserKey';
 
   const T = $derived($locale === 'id' ? dictionaries.id : dictionaries.en);
 
@@ -36,6 +37,7 @@
 
   <div class="message-form-container">
     <form method="POST" action="?/message" use:enhance={handleSubmit}>
+      <input type="hidden" name="browserKey" value={getBrowserKey()} />
       <input type="text" name="guestName" placeholder={T.messages.namePlaceholder} required />
       <textarea name="message" placeholder={T.messages.messagePlaceholder} required rows="3"></textarea>
       <button type="submit" disabled={submitting}>
