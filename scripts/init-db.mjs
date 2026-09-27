@@ -45,6 +45,20 @@ const statements = [
   )`
 ];
 
+// Idempotent migrations (run every start, safe to repeat):
+async function migrate(pool) {
+  // v2: guests.invite_code is no longer unique (multiple RSVPs per invitation code).
+  // MySQL has no DROP INDEX IF EXISTS, so check information_schema first.
+  const [rows] = await pool.query(
+    `SELECT DISTINCT INDEX_NAME FROM information_schema.STATISTICS
+     WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'guests' AND INDEX_NAME = 'invite_code'`
+  );
+  if (rows.length > 0) {
+    await pool.query('ALTER TABLE guests DROP INDEX invite_code');
+    console.log('migration: dropped legacy unique index guests.invite_code');
+  }
+}
+
 async function main() {
   let pool;
   for (let attempt = 1; attempt <= 15; attempt++) {
@@ -66,6 +80,7 @@ async function main() {
   for (const stmt of statements) {
     await pool.query(stmt);
   }
+  await migrate(pool);
   console.log('database schema ready');
   await pool.end();
 }

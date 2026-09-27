@@ -45,6 +45,17 @@ docker compose exec -e ADMIN_USERNAME=admin -e ADMIN_PASSWORD=your-secret-passwo
 ### Updating the deployment
 Rebuild and restart with the same command; data persists in the `mysql_data` Docker volume.
 
+### Applying database schema changes (Docker-only server, no npm/node)
+Schema changes ship inside the image and are applied automatically on container start by `scripts/init-db.mjs`:
+- New tables → `CREATE TABLE IF NOT EXISTS` (idempotent).
+- Column/index changes → idempotent migration steps (checked via `information_schema` before altering).
+
+So on any server, just deploy the new image:
+```bash
+docker compose up -d --build
+```
+The app container runs the migration on boot — no local node/npm or manual SQL needed. (For a one-off fix you can also run SQL inside the app container via `docker compose exec app node -e "..."` since it ships node + `mysql2`.)
+
 ### Managing the stack
 ```bash
 docker compose logs -f app      # follow app logs
