@@ -19,7 +19,7 @@
   .lang-btn {
     position: fixed;
     top: 0.8rem;
-    right: 3.6rem; /* sits between mute (0.8rem) and home (6.4rem) in the game */
+    right: 4rem; /* sits between mute (0.8rem) and home (7.2rem) with a small gap each */
     z-index: 90;
     width: 44px;
     height: 44px;

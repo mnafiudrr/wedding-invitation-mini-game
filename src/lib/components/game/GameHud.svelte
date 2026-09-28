@@ -71,7 +71,7 @@
   .home-btn {
     position: fixed;
     top: 0.8rem;
-    right: 6.4rem; /* sits beside the language toggle (3.6rem) and mute (0.8rem) */
+    right: 7.2rem; /* sits beside the language toggle (4rem) and mute (0.8rem) */
     z-index: 90;
     width: 44px;
     height: 44px;
