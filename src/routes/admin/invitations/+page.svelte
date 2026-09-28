@@ -10,6 +10,9 @@
   let expanded = $state<string[]>([]);
   let calling = $state('Bapak');
   let callingCustom = $state('');
+  let editingTemplate = $state(false);
+  // svelte-ignore state_referenced_locally — intentional: the draft starts from the saved template
+  let templateDraft = $state(data.waTemplate);
 
   function toggleAccesses(id: string) {
     expanded = expanded.includes(id) ? expanded.filter((x) => x !== id) : [...expanded, id];
@@ -19,19 +22,29 @@
     return calling === 'fill' ? callingCustom.trim().slice(0, 20) : calling;
   }
 
-  // Simplified mustache template: {{calling}}, {{name}} and {{link}} are replaced per invitation.
-  const WA_TEMPLATE =
-    "Assalamu'alaikum Wr. Wb.\n\n" +
-    'Yth. {{calling}} {{name}},\n\n' +
-    'Kami mengundang Anda untuk hadir dalam acara pernikahan kami.\n\n' +
-    'Buka undangan: {{link}}\n\n' +
-    'Terima kasih 🙏\n' +
-    'Vicky & Nafiu';
+  function openTemplateEditor() {
+    templateDraft = data.waTemplate;
+    editingTemplate = true;
+  }
 
+  const saveTemplateHandler: SubmitFunction = () => {
+    submitting = true;
+    return async ({ result, update }) => {
+      submitting = false;
+      if (result.type === 'success') {
+        editingTemplate = false;
+        await invalidateAll();
+      }
+      update({ reset: false });
+    };
+  };
+
+  // Simplified mustache template — uses the editable template from settings.
   function whatsappUrl(phone: string, name: string, code: string, calling: string): string {
     const normalized = phone.replace(/[^\d]/g, '').replace(/^0/, '62');
     const link = `${data.baseUrl}/?to=${code}`;
-    const message = WA_TEMPLATE.replaceAll('{{calling}}', calling)
+    const message = data.waTemplate
+      .replaceAll('{{calling}}', calling)
       .replaceAll('{{name}}', name)
       .replaceAll('{{link}}', link);
     return `https://wa.me/${normalized}?text=${encodeURIComponent(message)}`;
@@ -62,6 +75,27 @@
 {#if errorMsg}
   <div class="error">{errorMsg}</div>
 {/if}
+
+<div class="template-section">
+  <div class="template-head">
+    <strong>WhatsApp Template</strong>
+    {#if !editingTemplate}
+      <button class="btn" onclick={openTemplateEditor}>Edit Template</button>
+    {/if}
+  </div>
+  {#if editingTemplate}
+    <form method="POST" action="?/saveTemplate" use:enhance={saveTemplateHandler}>
+      <textarea name="template" rows="8" bind:value={templateDraft}></textarea>
+      <p class="hint">Placeholders: {'{{calling}}'} · {'{{name}}'} · {'{{link}}'}</p>
+      <div class="template-actions">
+        <button type="submit" class="btn wa" disabled={submitting}>Save Template</button>
+        <button type="button" class="btn" onclick={() => (editingTemplate = false)}>Cancel</button>
+      </div>
+    </form>
+  {:else}
+    <pre class="template-preview">{data.waTemplate}</pre>
+  {/if}
+</div>
 
 <form method="POST" action="?/create" use:enhance={createHandler} class="create-form">
   <input type="hidden" name="calling" value={submitCalling()} />
@@ -152,6 +186,54 @@
     border-radius: 10px;
     padding: 1rem;
     margin-bottom: 1.5rem;
+  }
+
+  .template-section {
+    background: #fdfbf7;
+    border: 3px solid #333;
+    border-radius: 10px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .template-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+  }
+
+  textarea {
+    width: 100%;
+    padding: 0.7rem;
+    border: 2px solid #333;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    resize: vertical;
+    box-sizing: border-box;
+  }
+
+  .hint {
+    margin: 0.4rem 0 0;
+    color: #777;
+    font-size: 0.8rem;
+  }
+
+  .template-actions {
+    display: flex;
+    gap: 0.6rem;
+    margin-top: 0.6rem;
+  }
+
+  .template-preview {
+    margin: 0;
+    white-space: pre-wrap;
+    color: #555;
+    font-family: inherit;
+    font-size: 0.9rem;
+    line-height: 1.5;
   }
 
   input {

@@ -3,7 +3,7 @@ export const dictionaries = {
     home: {
       title: 'Undangan Pernikahan',
       scroll: 'Gulir untuk menjelajah',
-      tapMe: 'Ketuk saya!'
+      tapMe: 'Tap aku!'
     },
     sections: {
       'bride-groom': 'Mempelai',

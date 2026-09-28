@@ -49,6 +49,10 @@ const statements = [
     browser_key VARCHAR(64) NOT NULL,
     code VARCHAR(100),
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+  )`,
+  `CREATE TABLE IF NOT EXISTS settings (
+    setting_key VARCHAR(50) PRIMARY KEY,
+    value TEXT NOT NULL
   )`
 ];
 

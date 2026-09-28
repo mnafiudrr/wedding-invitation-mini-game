@@ -1,7 +1,8 @@
 import { fail, redirect } from '@sveltejs/kit';
 import { db } from '$lib/server/db';
-import { invitations, activityLogs } from '$lib/server/db/schema';
+import { invitations, activityLogs, settings } from '$lib/server/db/schema';
 import { desc, eq } from 'drizzle-orm';
+import { DEFAULT_WA_TEMPLATE } from '$lib/data/whatsapp';
 import type { Actions, PageServerLoad } from './$types';
 
 function slugify(name: string): string {
@@ -18,12 +19,16 @@ const CALLING_OPTIONS = ['Bapak', 'Ibu', 'Saudara', 'Saudari'];
 
 export const load: PageServerLoad = async ({ locals, url }) => {
   if (!locals.user) redirect(302, '/admin/login');
-  const rows = await db.select().from(invitations).orderBy(desc(invitations.createdAt));
-  const logs = await db.select().from(activityLogs).orderBy(desc(activityLogs.createdAt));
+  const [rows, logs, templateRows] = await Promise.all([
+    db.select().from(invitations).orderBy(desc(invitations.createdAt)),
+    db.select().from(activityLogs).orderBy(desc(activityLogs.createdAt)),
+    db.select().from(settings).where(eq(settings.key, 'wa_template')).limit(1)
+  ]);
 
   return {
     baseUrl: url.origin,
     callingOptions: CALLING_OPTIONS,
+    waTemplate: templateRows[0]?.value ?? DEFAULT_WA_TEMPLATE,
     rows: rows.map((r) => {
       const accesses = logs.filter((l) => l.code === r.code);
       return {
@@ -80,6 +85,19 @@ export const actions: Actions = {
     const id = data.get('id') as string | null;
     if (!id) return fail(400, { error: 'Missing id.' });
     await db.delete(invitations).where(eq(invitations.id, id));
+    return { success: true };
+  },
+
+  saveTemplate: async ({ request }) => {
+    const data = await request.formData();
+    const template = (data.get('template') as string | null)?.trim() ?? '';
+    if (!template) return fail(400, { error: 'Template is required.' });
+
+    await db
+      .insert(settings)
+      .values({ key: 'wa_template', value: template })
+      .onDuplicateKeyUpdate({ set: { value: template } });
+
     return { success: true };
   }
 };

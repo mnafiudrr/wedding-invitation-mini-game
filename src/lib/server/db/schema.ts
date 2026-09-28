@@ -47,3 +47,8 @@ export const activityLogs = mysqlTable('activity_logs', {
   code: varchar('code', { length: 100 }), // ?to= value (null when absent)
   createdAt: timestamp('created_at').defaultNow().notNull()
 });
+
+export const settings = mysqlTable('settings', {
+  key: varchar('setting_key', { length: 50 }).primaryKey(),
+  value: text('value').notNull()
+});
