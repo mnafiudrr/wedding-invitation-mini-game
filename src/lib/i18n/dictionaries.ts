@@ -19,7 +19,7 @@ export const dictionaries = {
       groomParent: 'Putra dari Bapak {0} & Ibu {1}',
       storyTitle: 'Kisah Kami',
       storyBody:
-        'Kami bertemu pada tahun 2021 dan dipertemukan oleh kecintaan kami pada game retro. Setelah melewati enam tahun bersama, kami siap memulai perjalanan baru sebagai suami dan istri.'
+        'Kami pertama kali dipertemukan melalui sebuah platform 3D Virtual Streaming di tahun 2021. Berawal dari sekadar bermain bersama, perlahan kami mulai saling mengenal, berbagi cerita, dan memahami satu sama lain. Hingga akhirnya, setelah melalui berbagai proses, kami memutuskan untuk membawa hubungan ini ke jenjang pernikahan dan memulai kehidupan baru bersama.'
     },
     quran: {
       translation:
@@ -102,7 +102,7 @@ export const dictionaries = {
       groomParent: 'Son of Mr. {0} & Mrs. {1}',
       storyTitle: 'Our Story',
       storyBody:
-        'We met in 2021 and bonded over our shared love for retro games. After six wonderful years together, we are ready to begin a new chapter as husband and wife.'
+        'We first met through a 3D virtual streaming platform in 2021. What started as simply spending time and playing together gradually grew into getting to know each other, sharing stories, and understanding one another. After everything we have been through together, we decided to take the next step and begin a new chapter of our lives together.'
     },
     quran: {
       translation:
