@@ -21,6 +21,7 @@ const statements = [
     id VARCHAR(36) PRIMARY KEY,
     guest_name VARCHAR(100) NOT NULL,
     message TEXT NOT NULL,
+    browser_key VARCHAR(64) NOT NULL DEFAULT '',
     is_approved BOOLEAN NOT NULL DEFAULT FALSE,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
   )`,
@@ -79,6 +80,18 @@ async function migrate(pool) {
       "ALTER TABLE invitations ADD COLUMN calling VARCHAR(20) NOT NULL DEFAULT 'Bapak'"
     );
     console.log('migration: added invitations.calling column');
+  }
+
+  // v4: messages.browser_key column (trace a message back to the activity log).
+  const [mcols] = await pool.query(
+    `SELECT COLUMN_NAME FROM information_schema.COLUMNS
+     WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'messages' AND COLUMN_NAME = 'browser_key'`
+  );
+  if (mcols.length === 0) {
+    await pool.query(
+      "ALTER TABLE messages ADD COLUMN browser_key VARCHAR(64) NOT NULL DEFAULT ''"
+    );
+    console.log('migration: added messages.browser_key column');
   }
 }
 

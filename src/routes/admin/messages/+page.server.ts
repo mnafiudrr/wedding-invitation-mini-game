@@ -14,6 +14,7 @@ export const load: PageServerLoad = async ({ locals }) => {
       id: r.id,
       guestName: r.guestName,
       message: r.message,
+      browserKey: r.browserKey,
       isApproved: r.isApproved,
       createdAt: r.createdAt.toISOString()
     }))

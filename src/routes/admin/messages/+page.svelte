@@ -17,6 +17,10 @@
       };
     };
   }
+
+  function copyKey(key: string) {
+    navigator.clipboard?.writeText(key);
+  }
 </script>
 
 <h2>Messages</h2>
@@ -36,6 +40,11 @@
         <p class="body">{row.message}</p>
         <div class="foot">
           <span class="date">{new Date(row.createdAt).toLocaleString()}</span>
+          {#if row.browserKey}
+            <button class="bkey" onclick={() => copyKey(row.browserKey)} title="Click to copy browser key">
+              {row.browserKey}
+            </button>
+          {/if}
           <div class="actions">
             <form
               method="POST"
@@ -118,6 +127,21 @@
   .date {
     color: #888;
     font-size: 0.8rem;
+  }
+
+  .bkey {
+    background: #f0f0f7;
+    border: 2px solid #333;
+    border-radius: 6px;
+    padding: 0.25rem 0.6rem;
+    font-size: 0.7rem;
+    font-family: monospace;
+    color: #555;
+    cursor: pointer;
+    max-width: 40%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .actions {

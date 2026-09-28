@@ -82,6 +82,7 @@ export const actions = {
         id: crypto.randomUUID(),
         guestName,
         message,
+        browserKey,
         isApproved: true, // Auto approve for development testing
       });
       return { success: true };

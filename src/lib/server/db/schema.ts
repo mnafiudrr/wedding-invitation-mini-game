@@ -13,6 +13,7 @@ export const messages = mysqlTable('messages', {
   id: varchar('id', { length: 36 }).primaryKey(), // crypto.randomUUID()
   guestName: varchar('guest_name', { length: 100 }).notNull(),
   message: text('message').notNull(),
+  browserKey: varchar('browser_key', { length: 64 }).notNull().default(''),
   isApproved: boolean('is_approved').default(false).notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull()
 });
