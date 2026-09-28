@@ -2,7 +2,8 @@ export const dictionaries = {
   id: {
     home: {
       title: 'Undangan Pernikahan',
-      scroll: 'Gulir untuk menjelajah'
+      scroll: 'Gulir untuk menjelajah',
+      tapMe: 'Ketuk saya!'
     },
     sections: {
       'bride-groom': 'Mempelai',
@@ -84,7 +85,8 @@ export const dictionaries = {
   en: {
     home: {
       title: 'Wedding Invitation',
-      scroll: 'Scroll to explore'
+      scroll: 'Scroll to explore',
+      tapMe: 'Tap me!'
     },
     sections: {
       'bride-groom': 'The Couple',
@@ -165,7 +167,7 @@ export const dictionaries = {
 } as const;
 
 export type Dictionary = {
-  home: { title: string; scroll: string };
+  home: { title: string; scroll: string; tapMe: string };
   sections: Record<string, string>;
   brideGroom: { brideParent: string; groomParent: string; storyTitle: string; storyBody: string };
   quran: { translation: string; reference: string };

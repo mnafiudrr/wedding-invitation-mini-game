@@ -1,6 +1,7 @@
 <script lang="ts">
   import IdleSprite from '$lib/components/ui/IdleSprite.svelte';
   import HomeSection from './HomeSection.svelte';
+  import TapMe from './TapMe.svelte';
   import { COUPLE } from '$lib/data/couple';
   import { houses } from '$lib/data/houses';
   import { dictionaries, locale } from '$lib/i18n';
@@ -39,12 +40,18 @@
 
     <div class="character-selection">
       <button onclick={() => onselect('bride')}>
-        <IdleSprite art="women" size={96} blinkMin={3000} blinkMax={7000} />
+        <div class="avatar-wrap">
+          <IdleSprite art="women" size={96} blinkMin={3000} blinkMax={7000} />
+          <TapMe />
+        </div>
         <span class="name">{COUPLE.bride.name}</span>
       </button>
       <span class="amp">&</span>
       <button onclick={() => onselect('groom')}>
-        <IdleSprite art="men" size={96} blinkMin={3000} blinkMax={7000} />
+        <div class="avatar-wrap">
+          <IdleSprite art="men" size={96} blinkMin={3000} blinkMax={7000} />
+          <TapMe />
+        </div>
         <span class="name">{COUPLE.groom.name}</span>
       </button>
     </div>
@@ -130,6 +137,11 @@
   .name {
     font-size: 1.2rem;
     font-weight: bold;
+  }
+
+  .avatar-wrap {
+    position: relative;
+    display: inline-flex;
   }
 
   button:hover {
