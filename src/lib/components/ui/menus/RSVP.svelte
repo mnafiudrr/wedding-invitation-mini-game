@@ -109,7 +109,9 @@
   
   .radio-group {
     display: flex;
-    gap: 1rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
   }
   
   .submit-btn {
