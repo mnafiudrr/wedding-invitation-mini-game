@@ -37,6 +37,7 @@ export const invitations = mysqlTable('invitations', {
   name: varchar('name', { length: 100 }).notNull(),
   phone: varchar('phone', { length: 20 }).notNull(),
   code: varchar('code', { length: 100 }).notNull().unique(), // slug from name
+  calling: varchar('calling', { length: 20 }).notNull().default('Bapak'), // Bapak/Ibu/Saudara/Saudari/custom
   createdAt: timestamp('created_at').defaultNow().notNull()
 });
 

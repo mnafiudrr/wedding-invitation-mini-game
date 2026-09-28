@@ -14,6 +14,8 @@ function slugify(name: string): string {
     .replace(/^-|-$/g, '');
 }
 
+const CALLING_OPTIONS = ['Bapak', 'Ibu', 'Saudara', 'Saudari'];
+
 export const load: PageServerLoad = async ({ locals, url }) => {
   if (!locals.user) redirect(302, '/admin/login');
   const rows = await db.select().from(invitations).orderBy(desc(invitations.createdAt));
@@ -21,6 +23,7 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 
   return {
     baseUrl: url.origin,
+    callingOptions: CALLING_OPTIONS,
     rows: rows.map((r) => {
       const accesses = logs.filter((l) => l.code === r.code);
       return {
@@ -28,6 +31,7 @@ export const load: PageServerLoad = async ({ locals, url }) => {
         name: r.name,
         phone: r.phone,
         code: r.code,
+        calling: r.calling,
         createdAt: r.createdAt.toISOString(),
         accessed: accesses.length,
         accesses: accesses.map((a) => ({
@@ -44,9 +48,13 @@ export const actions: Actions = {
     const data = await request.formData();
     const name = (data.get('name') as string | null)?.trim() ?? '';
     const phone = (data.get('phone') as string | null)?.trim() ?? '';
+    const calling = (data.get('calling') as string | null)?.trim().slice(0, 20) ?? 'Bapak';
 
     if (!name || !phone) {
       return fail(400, { error: 'Name and phone are required.' });
+    }
+    if (!CALLING_OPTIONS.includes(calling) && calling.length === 0) {
+      return fail(400, { error: 'Invalid calling.' });
     }
 
     // slug code from name; append a suffix if it already exists
@@ -60,7 +68,8 @@ export const actions: Actions = {
       id: crypto.randomUUID(),
       name,
       phone,
-      code
+      code,
+      calling
     });
 
     return { success: true };

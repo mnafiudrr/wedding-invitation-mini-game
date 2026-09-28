@@ -41,6 +41,7 @@ const statements = [
     name VARCHAR(100) NOT NULL,
     phone VARCHAR(20) NOT NULL,
     code VARCHAR(100) NOT NULL UNIQUE,
+    calling VARCHAR(20) NOT NULL DEFAULT 'Bapak',
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
   )`,
   `CREATE TABLE IF NOT EXISTS activity_logs (
@@ -62,6 +63,18 @@ async function migrate(pool) {
   if (rows.length > 0) {
     await pool.query('ALTER TABLE guests DROP INDEX invite_code');
     console.log('migration: dropped legacy unique index guests.invite_code');
+  }
+
+  // v3: invitations.calling column (Bapak/Ibu/Saudara/Saudari/custom).
+  const [cols] = await pool.query(
+    `SELECT COLUMN_NAME FROM information_schema.COLUMNS
+     WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'invitations' AND COLUMN_NAME = 'calling'`
+  );
+  if (cols.length === 0) {
+    await pool.query(
+      "ALTER TABLE invitations ADD COLUMN calling VARCHAR(20) NOT NULL DEFAULT 'Bapak'"
+    );
+    console.log('migration: added invitations.calling column');
   }
 }
 

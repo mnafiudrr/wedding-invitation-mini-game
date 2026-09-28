@@ -8,26 +8,32 @@
   let submitting = $state(false);
   let errorMsg = $state('');
   let expanded = $state<string[]>([]);
+  let calling = $state('Bapak');
+  let callingCustom = $state('');
 
   function toggleAccesses(id: string) {
     expanded = expanded.includes(id) ? expanded.filter((x) => x !== id) : [...expanded, id];
   }
 
-  // Simplified mustache template: {{name}} and {{link}} are replaced per invitation.
+  function submitCalling(): string {
+    return calling === 'fill' ? callingCustom.trim().slice(0, 20) : calling;
+  }
+
+  // Simplified mustache template: {{calling}}, {{name}} and {{link}} are replaced per invitation.
   const WA_TEMPLATE =
     "Assalamu'alaikum Wr. Wb.\n\n" +
-    'Yth. Bapak/Ibu/Saudara/i {{name}}\n\n' +
-    'Dengan hormat, kami mengundang Bapak/Ibu/Saudara/i untuk hadir dalam acara ' +
-    'pernikahan kami:\n\n' +
-    'Buka undangan digital di: {{link}}\n\n' +
-    'Terima kasih atas kehadiran dan doa restunya.\n\n' +
-    'Wassalamu\'alaikum Wr. Wb.\n' +
+    'Yth. {{calling}} {{name}},\n\n' +
+    'Kami mengundang Anda untuk hadir dalam acara pernikahan kami.\n\n' +
+    'Buka undangan: {{link}}\n\n' +
+    'Terima kasih 🙏\n' +
     'Vicky & Nafiu';
 
-  function whatsappUrl(phone: string, name: string, code: string): string {
+  function whatsappUrl(phone: string, name: string, code: string, calling: string): string {
     const normalized = phone.replace(/[^\d]/g, '').replace(/^0/, '62');
     const link = `${data.baseUrl}/?to=${code}`;
-    const message = WA_TEMPLATE.replaceAll('{{name}}', name).replaceAll('{{link}}', link);
+    const message = WA_TEMPLATE.replaceAll('{{calling}}', calling)
+      .replaceAll('{{name}}', name)
+      .replaceAll('{{link}}', link);
     return `https://wa.me/${normalized}?text=${encodeURIComponent(message)}`;
   }
 
@@ -58,8 +64,18 @@
 {/if}
 
 <form method="POST" action="?/create" use:enhance={createHandler} class="create-form">
+  <input type="hidden" name="calling" value={submitCalling()} />
   <input type="text" name="name" placeholder="Guest name (e.g. Budi Santoso)" required />
   <input type="tel" name="phone" placeholder="Phone / WhatsApp number (e.g. 081234567890)" required />
+  <select name="callingSelect" bind:value={calling}>
+    {#each data.callingOptions as opt (opt)}
+      <option value={opt}>{opt}</option>
+    {/each}
+    <option value="fill">fill</option>
+  </select>
+  {#if calling === 'fill'}
+    <input type="text" placeholder="Custom calling (e.g. Kakak)" bind:value={callingCustom} />
+  {/if}
   <button type="submit" disabled={submitting}>
     {submitting ? 'Adding...' : 'Add Invitation'}
   </button>
@@ -72,7 +88,7 @@
     {#each data.rows as row (row.id)}
       <div class="card">
         <div class="head">
-          <strong>{row.name}</strong>
+          <strong>{row.calling} {row.name}</strong>
           <span class="code">{row.code}</span>
         </div>
         <p class="phone">{row.phone}</p>
@@ -96,7 +112,7 @@
         {/if}
         <div class="actions">
           <a
-            href={whatsappUrl(row.phone, row.name, row.code)}
+            href={whatsappUrl(row.phone, row.name, row.code, row.calling)}
             target="_blank"
             rel="noopener noreferrer"
             class="btn wa"
@@ -144,6 +160,15 @@
     border-radius: 8px;
     font-family: inherit;
     font-size: 1rem;
+  }
+
+  select {
+    padding: 0.7rem;
+    border: 2px solid #333;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 1rem;
+    background: #fff;
   }
 
   .create-form button[type='submit'] {
