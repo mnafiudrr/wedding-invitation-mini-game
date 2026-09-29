@@ -37,7 +37,7 @@ export const dictionaries = {
       }
     },
     maps: {
-      intro: 'Kami dengan senang hati menantikan kehadiran Anda di Gedung Serba Guna Perum Serdang Asri.',
+      intro: 'Kami dengan senang hati menantikan kehadiran Anda di Gedung Serba Guna Perum Serdang Asri 1 RT.07/06.',
       open: 'Lihat Lokasi di Google Maps'
     },
     rsvp: {
@@ -120,7 +120,7 @@ export const dictionaries = {
       }
     },
     maps: {
-      intro: 'We would be delighted to have you join us at Gedung Serba Guna Perum Serdang Asri.',
+      intro: 'We would be delighted to have you join us at Gedung Serba Guna Perum Serdang Asri 1 RT.07/06.',
       open: 'View on Google Maps'
     },
     rsvp: {
