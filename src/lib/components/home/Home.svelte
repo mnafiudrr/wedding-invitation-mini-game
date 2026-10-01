@@ -132,6 +132,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: flex-start;
     gap: 1rem;
     font-family: inherit;
     font-size: 1rem;
@@ -146,6 +147,10 @@
     text-align: center;
     line-height: 1.25;
     word-break: break-word;
+    align-self: stretch;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
   }
 
   .avatar-wrap {
