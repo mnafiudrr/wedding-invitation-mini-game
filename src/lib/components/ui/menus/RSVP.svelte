@@ -98,6 +98,7 @@
     border: none;
     padding: 0;
     margin: 0;
+    margin-bottom: 1.75rem;
   }
   
   input[type="text"], input[type="number"] {
