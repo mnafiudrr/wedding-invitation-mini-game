@@ -1,6 +1,6 @@
 export const COUPLE = {
   bride: { name: 'Vicky Ulfalliya', parent: 'Tulus Harjadi, S.E., M.M. & Titik Chotidjah' },
-  groom: { name: "Muqsithu Nafi'u Dzikri Rofi' Rosyid", parent: 'Fed Zainur Rokhman Rosyid & Elly Asrifah' }
+  groom: { name: "Muqsithu Nafi'u Dzikri Rofi' Rosyid", parent: 'Fed Zainur Rokhman Rosyid (Rahimahullah) & Elly Asrifah' }
 };
 
 export const EVENTS = [
