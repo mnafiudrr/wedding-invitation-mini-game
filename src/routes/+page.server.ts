@@ -42,7 +42,8 @@ export const actions = {
     const inviteCode = (data.get('inviteCode') as string | null)?.trim().slice(0, 50) ?? '';
     const name = (data.get('name') as string | null)?.trim().slice(0, 100) ?? '';
     const isAttending = data.get('isAttending') === 'true';
-    const headcount = Math.min(10, Math.max(1, parseInt(data.get('headcount') as string, 10) || 1));
+    const headcountRaw = parseInt(data.get('headcount') as string, 10) || 0;
+    const headcount = isAttending ? Math.min(10, Math.max(1, headcountRaw)) : 0;
 
     if (!inviteCode || !name) {
       return fail(400, { error: 'Missing required fields.' });

@@ -15,6 +15,12 @@
   let submitting = $state(false);
   let success = $state(false);
   let errorMsg = $state('');
+  let attending = $state('true');
+  let headcount = $state(1);
+
+  function onAttendingChange() {
+    headcount = attending === 'true' ? 1 : 0;
+  }
 
   const handleSubmit: SubmitFunction = () => {
     submitting = true;
@@ -54,18 +60,21 @@
         <input type="text" id="name" name="name" required placeholder={T.rsvp.namePlaceholder} />
       </div>
       
-      <fieldset class="form-group borderless">
+<fieldset class="form-group borderless">
         <legend>{T.rsvp.attend}</legend>
         <div class="radio-group">
-          <label><input type="radio" name="isAttending" value="true" checked /> {T.rsvp.yes}</label>
-          <label><input type="radio" name="isAttending" value="false" /> {T.rsvp.no}</label>
+          <label><input type="radio" name="isAttending" value="true" bind:group={attending} onchange={onAttendingChange} /> {T.rsvp.yes}</label>
+          <label><input type="radio" name="isAttending" value="false" bind:group={attending} onchange={onAttendingChange} /> {T.rsvp.no}</label>
         </div>
       </fieldset>
-      
-      <div class="form-group">
-        <label for="headcount">{T.rsvp.headcount}</label>
-        <input type="number" id="headcount" name="headcount" min="1" max="5" value="1" required />
-      </div>
+
+      {#if attending === 'true'}
+        <div class="form-group">
+          <label for="headcount">{T.rsvp.headcount}</label>
+          <input type="number" id="headcount" bind:value={headcount} min="1" max="5" required />
+        </div>
+      {/if}
+      <input type="hidden" name="headcount" value={attending === 'true' ? headcount : 0} />
       
       <button type="submit" class="submit-btn" disabled={submitting}>
         {submitting ? T.rsvp.submitting : T.rsvp.submit}
