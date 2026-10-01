@@ -1,6 +1,6 @@
 export const COUPLE = {
-  bride: { name: 'Vicky Ulfa', parent: 'Tulus & Titik' },
-  groom: { name: 'Nafiu Rosyid', parent: 'Fed & Elly' }
+  bride: { name: 'Vicky Ulfalliya', parent: 'Tulus & Titik' },
+  groom: { name: "Muqsithu Nafi'u Dzikri Rofi' Rosyid", parent: 'Fed & Elly' }
 };
 
 export const EVENTS = [

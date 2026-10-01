@@ -9,4 +9,4 @@ export const DEFAULT_WA_TEMPLATE =
   'Kami mengundang Anda untuk hadir dalam acara pernikahan kami.\n\n' +
   'Buka undangan: {{link}}\n\n' +
   'Terima kasih 🙏\n' +
-  'Vicky & Nafiu';
+  'Vicky & Muqsithu';
