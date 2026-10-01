@@ -98,7 +98,7 @@
     border: none;
     padding: 0;
     margin: 0;
-    margin-bottom: 1.75rem;
+    margin-bottom: 1rem;
   }
   
   input[type="text"], input[type="number"] {
@@ -113,6 +113,7 @@
     flex-direction: column;
     align-items: flex-start;
     gap: 0.5rem;
+    margin-top: 0.5rem;
   }
   
   .submit-btn {
