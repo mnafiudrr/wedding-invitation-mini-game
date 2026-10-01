@@ -111,7 +111,10 @@
   .character-selection {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 1.5rem;
+    width: min(92vw, 520px);
+    padding: 0 1rem;
   }
 
   .amp {
@@ -119,6 +122,7 @@
     font-weight: bold;
     color: #333;
     transform: translateY(-20px);
+    flex: none;
   }
 
   button {
@@ -132,11 +136,16 @@
     font-family: inherit;
     font-size: 1rem;
     transition: transform 0.2s;
+    flex: 1 1 0;
+    min-width: 0;
   }
 
   .name {
     font-size: 1.2rem;
     font-weight: bold;
+    text-align: center;
+    line-height: 1.25;
+    word-break: break-word;
   }
 
   .avatar-wrap {
