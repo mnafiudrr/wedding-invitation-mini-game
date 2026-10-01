@@ -110,7 +110,7 @@
 
   .character-selection {
     display: flex;
-    align-items: center;
+    align-items: self-start;
     justify-content: center;
     gap: 1.5rem;
     width: min(92vw, 520px);
@@ -123,6 +123,7 @@
     color: #333;
     transform: translateY(-20px);
     flex: none;
+    margin-top: 3rem;
   }
 
   button {
