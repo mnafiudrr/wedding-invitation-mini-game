@@ -37,6 +37,10 @@
     <span class="num">{data.summary.accesses}</span>
     <span class="lbl">Invite accesses</span>
   </a>
+  <a class="card game" href="/admin/activity">
+    <span class="num">{data.summary.gameAccesses}</span>
+    <span class="lbl">Mini Game plays</span>
+  </a>
   <a class="card" href="/admin/activity">
     <span class="num">{data.summary.uniqueBrowsers}</span>
     <span class="lbl">Unique browsers</span>
@@ -49,7 +53,7 @@
     {#each data.recentLogs as log (log.createdAt + log.browserKey)}
       <div class="row">
         <span class="when">{new Date(log.createdAt).toLocaleString()}</span>
-        <code>{log.code ?? '(no to)'}</code>
+        <code>{log.action === 'game' ? '🎮 ' + (log.meta ?? '') : (log.code ?? '(no to)')}</code>
         <code class="bkey">{log.browserKey}</code>
       </div>
     {/each}
@@ -101,6 +105,10 @@
 
   .card.pending {
     background: #ffdfba;
+  }
+
+  .card.game {
+    background: #baffc9;
   }
 
   .num {

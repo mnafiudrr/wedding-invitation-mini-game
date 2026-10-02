@@ -36,10 +36,13 @@ export const load: PageServerLoad = async ({ locals }) => {
       messages: messageRows.length,
       pendingMessages: messageRows.filter((m) => !m.isApproved).length,
       accesses,
+      gameAccesses: logRows.filter((l) => l.action === 'game').length,
       uniqueBrowsers: browsers.size
     },
     recentLogs: logRows.slice(0, 8).map((l) => ({
       code: l.code,
+      action: l.action,
+      meta: l.meta,
       browserKey: l.browserKey,
       createdAt: l.createdAt.toISOString()
     }))

@@ -49,6 +49,8 @@ const statements = [
     id VARCHAR(36) PRIMARY KEY,
     browser_key VARCHAR(64) NOT NULL,
     code VARCHAR(100),
+    action VARCHAR(20) NOT NULL DEFAULT 'page',
+    meta VARCHAR(100),
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
   )`,
   `CREATE TABLE IF NOT EXISTS settings (
@@ -92,6 +94,18 @@ async function migrate(pool) {
       "ALTER TABLE messages ADD COLUMN browser_key VARCHAR(64) NOT NULL DEFAULT ''"
     );
     console.log('migration: added messages.browser_key column');
+  }
+
+  // v5: activity_logs.action + meta columns (mini-game access logging).
+  const [acols] = await pool.query(
+    `SELECT COLUMN_NAME FROM information_schema.COLUMNS
+     WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'activity_logs' AND COLUMN_NAME = 'action'`
+  );
+  if (acols.length === 0) {
+    await pool.query(
+      "ALTER TABLE activity_logs ADD COLUMN action VARCHAR(20) NOT NULL DEFAULT 'page', ADD COLUMN meta VARCHAR(100) NULL"
+    );
+    console.log('migration: added activity_logs.action/meta columns');
   }
 }
 

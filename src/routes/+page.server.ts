@@ -97,13 +97,17 @@ export const actions = {
     const data = await request.formData();
     const browserKey = (data.get('browserKey') as string | null)?.slice(0, 64) ?? '';
     const code = (data.get('code') as string | null)?.slice(0, 100) || null;
+    const action = (data.get('action') as string | null)?.slice(0, 20) || 'page';
+    const meta = (data.get('meta') as string | null)?.slice(0, 100) || null;
 
     if (!browserKey) return fail(400, { error: 'Missing browser key.' });
 
     await db.insert(activityLogs).values({
       id: crypto.randomUUID(),
       browserKey,
-      code
+      code,
+      action,
+      meta
     });
     return { success: true };
   }

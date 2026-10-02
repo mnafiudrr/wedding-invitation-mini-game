@@ -99,9 +99,24 @@
     }
   }
 
+  // Log when the user enters the mini game and which character they chose.
+  function logGameAccess(char: 'bride' | 'groom') {
+    try {
+      const code = new URLSearchParams(window.location.search).get('to') ?? '';
+      void fetch('/?/log', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({ browserKey: getBrowserKey(), code, action: 'game', meta: char }).toString()
+      });
+    } catch {
+      /* non-critical */
+    }
+  }
+
   function selectCharacter(char: 'bride' | 'groom') {
     startBgm();
     audio.play('select');
+    logGameAccess(char);
     $selectedCharacter = char;
     $gameState = 'playing';
 

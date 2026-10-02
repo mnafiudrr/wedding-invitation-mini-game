@@ -20,6 +20,8 @@ export const load: PageServerLoad = async ({ locals }) => {
       id: l.id,
       browserKey: l.browserKey,
       code: l.code,
+      action: l.action,
+      meta: l.meta,
       name: l.code ? names.get(l.code) ?? null : null,
       createdAt: l.createdAt.toISOString()
     }))
