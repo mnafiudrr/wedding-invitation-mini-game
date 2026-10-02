@@ -4,7 +4,7 @@
 
   const T = $derived($locale === 'id' ? dictionaries.id : dictionaries.en);
 
-  // Shows immediately on load, hides after 2s, then pops up randomly every 3-7s (1-3s each).
+  // Shows immediately on load, hides after 1s, then pops up randomly every 3-7s (1-3s each).
   let visible = $state(false);
   let timer: ReturnType<typeof setTimeout> | undefined;
 
@@ -25,7 +25,7 @@
     timer = setTimeout(() => {
       visible = false;
       schedule();
-    }, 2000);
+    }, 1000);
     return () => {
       if (timer) clearTimeout(timer);
     };
