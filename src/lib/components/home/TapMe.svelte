@@ -4,12 +4,14 @@
 
   const T = $derived($locale === 'id' ? dictionaries.id : dictionaries.en);
 
-  // Pops up periodically (every 3-7s) and stays for 1-3s to hint the avatar is tappable.
+  // First appearance right after 2s, then randomly every 3-7s; stays for 1-3s.
   let visible = $state(false);
   let timer: ReturnType<typeof setTimeout> | undefined;
+  let first = true;
 
   function schedule() {
-    const delay = 3000 + Math.random() * 4000; // 3-7s
+    const delay = first ? 2000 : 3000 + Math.random() * 4000; // 2s first, then 3-7s
+    first = false;
     timer = setTimeout(() => {
       visible = true;
       const duration = 1000 + Math.random() * 2000; // 1-3s
