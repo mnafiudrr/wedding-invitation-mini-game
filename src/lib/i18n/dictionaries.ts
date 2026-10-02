@@ -2,7 +2,7 @@ export const dictionaries = {
   id: {
     home: {
       title: 'Undangan Pernikahan',
-      scroll: 'Gulir untuk menjelajah',
+      scroll: 'Scroll untuk lihat lebih banyak',
       tapMe: 'Tap aku!'
     },
     sections: {
