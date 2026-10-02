@@ -8,6 +8,7 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  -webkit-touch-callout: none; /* iOS: suppress long-press image/callout preview on any element */
 }
 
 html, body {
