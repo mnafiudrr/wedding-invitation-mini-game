@@ -69,8 +69,7 @@
 
 <style>
   .home-scroll {
-    height: 100vh;
-    height: 100svh;
+    height: 100%;
     overflow-y: auto;
     touch-action: pan-y;
     scroll-snap-type: y proximity;

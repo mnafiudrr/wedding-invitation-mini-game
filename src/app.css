@@ -14,7 +14,7 @@ html, body {
   width: 100%;
   height: 100%;
   overflow: hidden; /* Prevent native scrolling, handle via JS */
-  background-color: var(--bg-sky);
+  background-color: #10131a; /* desktop backdrop behind the mobile portrait frame */
   font-family: 'Courier New', Courier, monospace; /* Placeholder pixel font */
   touch-action: none; /* Prevent native swipe actions */
 }

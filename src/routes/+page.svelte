@@ -38,34 +38,19 @@
 
   const T = $derived($locale === 'id' ? dictionaries.id : dictionaries.en);
 
-  // ---- Responsive scale-to-fit ----
+  // ---- Responsive scale-to-fit (mobile-first) ----
   // The game is designed on a fixed base canvas (BASE_W wide) and scaled to the
-  // visual viewport width, so it always fills the screen left-to-right with no
-  // letterboxing. The base height is derived from the viewport (baseH = vh / scale),
-  // which lets the world stretch vertically while staying horizontally anchored.
-  // Using window.visualViewport (instead of innerWidth/100vh) keeps the game
-  // identical across phones and in-app browsers (Chrome/Brave/Telegram).
+  // phone frame's width, so it always fills the frame left-to-right. The base
+  // height is derived from the frame height (baseH = h / scale), letting the
+  // world stretch vertically while staying horizontally anchored.
   const BASE_W = 400;
-  let vw = $state(BASE_W);
-  let vh = $state(800);
-  const scale = $derived(vw / BASE_W);
-  const baseH = $derived(Math.max(600, vh / scale));
-
-  function measureViewport() {
-    if (typeof window === 'undefined') return;
-    const vv = window.visualViewport;
-    vw = vv ? vv.width : window.innerWidth;
-    vh = vv ? vv.height : window.innerHeight;
-  }
+  let frameW = $state(BASE_W);
+  let frameH = $state(800);
+  const scale = $derived(frameW / BASE_W);
+  const baseH = $derived(Math.max(600, frameH / scale));
 
   onMount(() => {
     initLocale();
-    measureViewport();
-    const vv = window.visualViewport;
-    window.addEventListener('resize', measureViewport);
-    window.addEventListener('orientationchange', measureViewport);
-    vv?.addEventListener('resize', measureViewport);
-    vv?.addEventListener('scroll', measureViewport);
 
     // Log page access (with a per-browser key) so admins can trace activity.
     logActivity();
@@ -84,10 +69,6 @@
     window.addEventListener('keydown', onFirstGesture, true);
 
     return () => {
-      window.removeEventListener('resize', measureViewport);
-      window.removeEventListener('orientationchange', measureViewport);
-      vv?.removeEventListener('resize', measureViewport);
-      vv?.removeEventListener('scroll', measureViewport);
       window.removeEventListener('pointerdown', onFirstGesture, true);
       window.removeEventListener('keydown', onFirstGesture, true);
     };
@@ -166,12 +147,17 @@
   }
 </script>
 
-{#if $gameState === 'title'}
-  <MuteButton />
-  <LanguageToggle />
-  <Home onselect={selectCharacter} />
-{:else if $gameState === 'playing'}
-  <MuteButton />
+<div
+  class="mobile-frame"
+  bind:clientWidth={frameW}
+  bind:clientHeight={frameH}
+>
+  {#if $gameState === 'title'}
+    <MuteButton />
+    <LanguageToggle />
+    <Home onselect={selectCharacter} />
+  {:else if $gameState === 'playing'}
+    <MuteButton />
   <LanguageToggle />
   <GameHud />
   <div class="game-container">
@@ -226,13 +212,24 @@
       {/if}
     </Modal>
   {/if}
-{/if}
+  {/if}
+</div>
 
 <style>
-  .game-container {
-    width: 100vw;
-    height: 100vh;
+  /* Mobile-first: force a portrait (taller-than-wide) view, centered on desktop */
+  .mobile-frame {
+    position: relative;
     height: 100dvh;
+    width: 100%;
+    max-width: min(100vw, calc(100dvh * 0.56));
+    margin: 0 auto;
+    overflow: hidden;
+    background: var(--bg-sky);
+  }
+
+  .game-container {
+    width: 100%;
+    height: 100%;
     position: relative;
     overflow: hidden;
     display: flex;

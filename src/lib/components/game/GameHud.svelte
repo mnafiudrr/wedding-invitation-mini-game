@@ -33,7 +33,7 @@
 
 <style>
   .hud-left {
-    position: fixed;
+    position: absolute;
     top: 0.8rem;
     left: 0.8rem;
     z-index: 90;
@@ -69,7 +69,7 @@
   }
 
   .home-btn {
-    position: fixed;
+    position: absolute;
     top: 0.8rem;
     right: 7.2rem; /* sits beside the language toggle (4rem) and mute (0.8rem) */
     z-index: 90;

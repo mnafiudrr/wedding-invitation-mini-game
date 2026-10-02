@@ -21,7 +21,7 @@
 
 <style>
   .mute-btn {
-    position: fixed;
+    position: absolute;
     top: 0.8rem;
     right: 0.8rem;
     z-index: 90;
