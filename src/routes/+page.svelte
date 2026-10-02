@@ -279,6 +279,7 @@
     justify-content: center;
     user-select: none;
     -webkit-user-select: none;
+    -webkit-touch-callout: none;
     touch-action: none;
     box-shadow: 0 4px 0 #333;
   }

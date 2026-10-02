@@ -22,4 +22,7 @@ html, body {
 /* Pixel art rendering for images */
 img {
   image-rendering: pixelated;
+  -webkit-touch-callout: none; /* iOS: suppress long-press image preview/callout */
+  user-select: none;
+  -webkit-user-select: none;
 }
