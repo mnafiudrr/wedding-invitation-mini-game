@@ -2,6 +2,7 @@ import { fail } from '@sveltejs/kit';
 import { db } from '$lib/server/db';
 import { guests, messages, activityLogs } from '$lib/server/db/schema';
 import { desc, eq } from 'drizzle-orm';
+import { parseDevice } from '$lib/server/device';
 
 export const load = async ({ url }) => {
   try {
@@ -93,7 +94,7 @@ export const actions = {
     }
   },
 
-  log: async ({ request }) => {
+  log: async ({ request, getClientAddress }) => {
     const data = await request.formData();
     const browserKey = (data.get('browserKey') as string | null)?.slice(0, 64) ?? '';
     const code = (data.get('code') as string | null)?.slice(0, 100) || null;
@@ -102,12 +103,27 @@ export const actions = {
 
     if (!browserKey) return fail(400, { error: 'Missing browser key.' });
 
+    // Enrich with Cloudflare headers (null when absent / direct access) + User-Agent.
+    const h = request.headers;
+    const ua = (h.get('user-agent') ?? '').slice(0, 255);
+    const ip = (h.get('cf-connecting-ip') ?? getClientAddress()).slice(0, 45);
+    const rawCountry = (h.get('cf-ipcountry') ?? '').toUpperCase();
+    const country = rawCountry && rawCountry !== 'XX' && rawCountry !== 'T1' ? rawCountry : null;
+    const city = (h.get('cf-ipcity') ?? '').slice(0, 64) || null;
+    const region = (h.get('cf-region') ?? '').slice(0, 64) || null;
+
     await db.insert(activityLogs).values({
       id: crypto.randomUUID(),
       browserKey,
       code,
       action,
-      meta
+      meta,
+      ip,
+      country,
+      city,
+      region,
+      device: parseDevice(ua),
+      ua
     });
     return { success: true };
   }

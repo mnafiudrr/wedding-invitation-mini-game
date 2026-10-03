@@ -1,9 +1,11 @@
 import { fail, redirect } from '@sveltejs/kit';
 import { db } from '$lib/server/db';
 import { invitations, activityLogs, settings } from '$lib/server/db/schema';
-import { desc, eq } from 'drizzle-orm';
+import { and, count, desc, eq, inArray, like, or } from 'drizzle-orm';
 import { DEFAULT_WA_TEMPLATE } from '$lib/data/whatsapp';
 import type { Actions, PageServerLoad } from './$types';
+
+const PAGE_SIZE = 25;
 
 function slugify(name: string): string {
   return name
@@ -19,16 +21,54 @@ const CALLING_OPTIONS = ['Bapak', 'Ibu', 'Saudara', 'Saudari'];
 
 export const load: PageServerLoad = async ({ locals, url }) => {
   if (!locals.user) redirect(302, '/admin/login');
-  const [rows, logs, templateRows] = await Promise.all([
-    db.select().from(invitations).orderBy(desc(invitations.createdAt)),
-    db.select().from(activityLogs).orderBy(desc(activityLogs.createdAt)),
-    db.select().from(settings).where(eq(settings.key, 'wa_template')).limit(1)
-  ]);
+
+  const q = (url.searchParams.get('q') ?? '').trim();
+  const page = Math.max(1, parseInt(url.searchParams.get('page') ?? '1', 10) || 1);
+
+  const whereCond = q
+    ? or(
+        like(invitations.name, `%${q}%`),
+        like(invitations.phone, `%${q}%`),
+        like(invitations.code, `%${q}%`)
+      )
+    : undefined;
+
+  const [{ c: total }] = await db
+    .select({ c: count() })
+    .from(invitations)
+    .where(whereCond);
+
+  const rows = await db
+    .select()
+    .from(invitations)
+    .where(whereCond)
+    .orderBy(desc(invitations.createdAt))
+    .limit(PAGE_SIZE)
+    .offset((page - 1) * PAGE_SIZE);
+
+  const codes = rows.map((r) => r.code);
+  const logs = codes.length
+    ? await db
+        .select()
+        .from(activityLogs)
+        .where(inArray(activityLogs.code, codes))
+        .orderBy(desc(activityLogs.createdAt))
+    : [];
+
+  const templateRows = await db
+    .select()
+    .from(settings)
+    .where(eq(settings.key, 'wa_template'))
+    .limit(1);
 
   return {
     baseUrl: url.origin,
     callingOptions: CALLING_OPTIONS,
     waTemplate: templateRows[0]?.value ?? DEFAULT_WA_TEMPLATE,
+    q,
+    page,
+    pageSize: PAGE_SIZE,
+    total,
     rows: rows.map((r) => {
       const accesses = logs.filter((l) => l.code === r.code);
       return {

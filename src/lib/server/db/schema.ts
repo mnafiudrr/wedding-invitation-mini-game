@@ -48,6 +48,12 @@ export const activityLogs = mysqlTable('activity_logs', {
   code: varchar('code', { length: 100 }), // ?to= value (null when absent)
   action: varchar('action', { length: 20 }).notNull().default('page'), // 'page' | 'game'
   meta: varchar('meta', { length: 100 }), // e.g. chosen character 'bride' | 'groom'
+  ip: varchar('ip', { length: 45 }), // CF-Connecting-IP (or socket address)
+  country: varchar('country', { length: 2 }), // CF-IPCountry
+  city: varchar('city', { length: 64 }), // CF-IPCity
+  region: varchar('region', { length: 64 }), // CF-Region
+  device: varchar('device', { length: 120 }), // parsed from User-Agent
+  ua: varchar('ua', { length: 255 }), // raw User-Agent
   createdAt: timestamp('created_at').defaultNow().notNull()
 });
 

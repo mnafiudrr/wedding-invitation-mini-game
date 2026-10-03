@@ -18,6 +18,15 @@
     expanded = expanded.includes(id) ? expanded.filter((x) => x !== id) : [...expanded, id];
   }
 
+  function pageUrl(page: number): string {
+    const params = new URLSearchParams();
+    if (data.q) params.set('q', data.q);
+    params.set('page', String(page));
+    return `/admin/invitations?${params.toString()}`;
+  }
+
+  const totalPages = $derived(Math.max(1, Math.ceil(data.total / data.pageSize)));
+
   function submitCalling(): string {
     return calling === 'fill' ? callingCustom.trim().slice(0, 20) : calling;
   }
@@ -115,6 +124,11 @@
   </button>
 </form>
 
+<form method="GET" class="search-form">
+  <input type="search" name="q" value={data.q} placeholder="Search by name, phone or code..." />
+  <button type="submit">Search</button>
+</form>
+
 {#if data.rows.length === 0}
   <p class="empty">No invitations yet.</p>
 {:else}
@@ -159,6 +173,20 @@
         </div>
       </div>
     {/each}
+  </div>
+
+  <div class="pager">
+    {#if data.page > 1}
+      <a href={pageUrl(data.page - 1)}>← Prev</a>
+    {:else}
+      <span class="disabled">← Prev</span>
+    {/if}
+    <span class="info">Page {data.page} of {totalPages} ({data.total} total)</span>
+    {#if data.page < totalPages}
+      <a href={pageUrl(data.page + 1)}>Next →</a>
+    {:else}
+      <span class="disabled">Next →</span>
+    {/if}
   </div>
 {/if}
 
@@ -379,5 +407,59 @@
     text-align: center;
     color: #777;
     padding: 2rem;
+  }
+
+  .search-form {
+    display: flex;
+    gap: 0.6rem;
+    margin-bottom: 1.2rem;
+    flex-wrap: wrap;
+  }
+
+  .search-form input {
+    flex: 1 1 200px;
+    min-width: 0;
+  }
+
+  .search-form button {
+    padding: 0.7rem 1.1rem;
+    min-height: 44px;
+    background: #bae1ff;
+    border: 2px solid #333;
+    border-radius: 8px;
+    font-family: inherit;
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  .pager {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .pager a {
+    background: #bae1ff;
+    border: 2px solid #333;
+    border-radius: 6px;
+    padding: 0.5rem 0.9rem;
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    min-height: 40px;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .pager .disabled {
+    color: #aaa;
+    padding: 0.5rem 0.9rem;
+  }
+
+  .pager .info {
+    color: #666;
   }
 </style>

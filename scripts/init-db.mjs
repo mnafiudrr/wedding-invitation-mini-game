@@ -51,6 +51,12 @@ const statements = [
     code VARCHAR(100),
     action VARCHAR(20) NOT NULL DEFAULT 'page',
     meta VARCHAR(100),
+    ip VARCHAR(45),
+    country VARCHAR(2),
+    city VARCHAR(64),
+    region VARCHAR(64),
+    device VARCHAR(120),
+    ua VARCHAR(255),
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
   )`,
   `CREATE TABLE IF NOT EXISTS settings (
@@ -106,6 +112,24 @@ async function migrate(pool) {
       "ALTER TABLE activity_logs ADD COLUMN action VARCHAR(20) NOT NULL DEFAULT 'page', ADD COLUMN meta VARCHAR(100) NULL"
     );
     console.log('migration: added activity_logs.action/meta columns');
+  }
+
+  // v6: activity_logs geo/device columns (CF headers + User-Agent).
+  const [gcols] = await pool.query(
+    `SELECT COLUMN_NAME FROM information_schema.COLUMNS
+     WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'activity_logs' AND COLUMN_NAME = 'ip'`
+  );
+  if (gcols.length === 0) {
+    await pool.query(
+      `ALTER TABLE activity_logs
+       ADD COLUMN ip VARCHAR(45) NULL,
+       ADD COLUMN country VARCHAR(2) NULL,
+       ADD COLUMN city VARCHAR(64) NULL,
+       ADD COLUMN region VARCHAR(64) NULL,
+       ADD COLUMN device VARCHAR(120) NULL,
+       ADD COLUMN ua VARCHAR(255) NULL`
+    );
+    console.log('migration: added activity_logs geo/device columns');
   }
 }
 
